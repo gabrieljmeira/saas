@@ -1,22 +1,29 @@
 "use client";
-
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
 import { SummaryCards } from "./summary-cards";
-import { DailyGoal } from "./daily-goal";
 import { Filters } from "./filters";
 import { LeadsTable } from "./leads-table";
 import { MOCK_LEADS, Lead } from "./mock-data";
 import { EmptyState } from "./empty-state";
+import { LoadingFaro } from "./loading-faro";
 
 export function DashboardModule() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Local state for leads so we can modify them (e.g. mark as contacted)
   const [leads, setLeads] = useState<Lead[]>(MOCK_LEADS);
+
+  // Simulate loading on search/filter changes
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, [searchQuery, activeFilters]);
 
   const toggleFilter = (filterName: string) => {
     setActiveFilters((prev) =>
@@ -76,15 +83,10 @@ export function DashboardModule() {
           onSearch={setSearchQuery}
         />
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 space-y-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 space-y-8 bg-slate-950">
           {/* Métricas e Meta */}
-          <div className="flex flex-col xl:flex-row gap-6">
-            <div className="flex-1">
-              <SummaryCards leads={leads} />
-            </div>
-            <div className="w-full xl:w-96 shrink-0">
-              <DailyGoal leads={leads} />
-            </div>
+          <div className="w-full">
+            <SummaryCards leads={leads} />
           </div>
 
           {/* Área Principal (Tabela e Filtros) */}
@@ -96,7 +98,9 @@ export function DashboardModule() {
               resultsCount={filteredLeads.length}
             />
 
-            {filteredLeads.length > 0 ? (
+            {isLoading ? (
+              <LoadingFaro />
+            ) : filteredLeads.length > 0 ? (
               <LeadsTable leads={filteredLeads} onUpdateLead={updateLead} />
             ) : (
               <EmptyState onClear={clearFilters} />

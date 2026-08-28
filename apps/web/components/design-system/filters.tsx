@@ -25,8 +25,8 @@ export function Filters({
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-muted-foreground mr-2 font-medium shrink-0">
-          Filtros:
+        <span className="text-sm text-gray-400 mr-2 font-medium shrink-0">
+          Filtros Sugeridos:
         </span>
         {filterOptions.map((filter) => {
           const isActive = activeFilters.includes(filter.name);
@@ -36,13 +36,13 @@ export function Filters({
               variant={isActive ? "default" : "outline"}
               size="sm"
               onClick={() => onToggleFilter(filter.name)}
-              className={`rounded-full h-8 px-3 text-xs transition-colors ${
+              className={`rounded-full h-8 px-3 text-xs transition-colors duration-300 border-gray-700 ${
                 isActive
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "bg-background hover:bg-muted text-muted-foreground"
+                  ? "bg-orange-500 text-white hover:bg-orange-600 border-transparent shadow-[0_0_10px_rgba(249,115,22,0.3)]"
+                  : "bg-slate-900/50 hover:bg-slate-800 text-gray-300 hover:text-white"
               }`}
             >
-              <filter.icon className="w-3.5 h-3.5 mr-1.5" />
+              <filter.icon className={`w-3.5 h-3.5 mr-1.5 ${isActive ? 'text-white' : 'text-orange-500'}`} />
               {filter.name}
             </Button>
           );
@@ -52,15 +52,15 @@ export function Filters({
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className="h-8 text-xs text-muted-foreground hover:text-foreground shrink-0"
+            className="h-8 text-xs text-gray-400 hover:text-white shrink-0 hover:bg-slate-800"
           >
             Limpar todos
           </Button>
         )}
       </div>
 
-      <div className="text-sm text-muted-foreground whitespace-nowrap shrink-0">
-        {resultsCount} {resultsCount === 1 ? "lead" : "leads"}
+      <div className="text-sm text-gray-400 whitespace-nowrap shrink-0">
+        <strong className="text-white">{resultsCount}</strong> {resultsCount === 1 ? "lead farejado" : "leads farejados"}
       </div>
     </div>
   );

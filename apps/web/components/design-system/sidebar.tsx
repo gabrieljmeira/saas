@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
@@ -43,7 +44,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40 md:hidden"
           onClick={onClose}
         />
       )}
@@ -51,23 +52,28 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar Container */}
       <aside
         className={`
-        fixed inset-y-0 left-0 z-50 w-64 border-r bg-card/95 px-4 py-6 text-sm transform transition-transform duration-200 ease-in-out
-        md:relative md:translate-x-0 md:bg-card/50
+        fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-800 bg-slate-900 px-4 py-6 text-sm transform transition-transform duration-200 ease-in-out
+        md:relative md:translate-x-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
       `}
       >
         <div className="flex h-full flex-col">
           <div className="mb-8 px-2 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-primary font-bold text-xl">
-              <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground text-xs">P</span>
-              </div>
-              Prospecção
+            <div className="flex items-center gap-3 text-white font-bold text-xl tracking-tight">
+              <Image 
+                src="/mascot-logo.jpg" 
+                alt="FetchLeads Logo" 
+                width={36} 
+                height={36} 
+                className="rounded-md object-cover shadow-sm"
+                quality={90}
+              />
+              FetchLeads
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden text-gray-400 hover:text-white"
               onClick={onClose}
             >
               <X className="w-5 h-5" />
@@ -80,14 +86,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 return (
                   <div
                     key={item.name}
-                    className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-muted-foreground opacity-60 cursor-not-allowed"
+                    className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-gray-600 cursor-not-allowed"
                     title="Em breve"
                   >
                     <div className="flex items-center gap-3">
                       <item.icon className="w-4 h-4" />
                       {item.name}
                     </div>
-                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-muted">
+                    <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-slate-800 text-gray-500">
                       Em breve
                     </span>
                   </div>
@@ -98,10 +104,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <Link
                   key={item.name}
                   href="#"
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors ${
+                  className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors duration-300 ${
                     item.active
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? "bg-orange-500/10 text-orange-500 font-medium border border-orange-500/20"
+                      : "text-gray-400 hover:bg-slate-800 hover:text-white"
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
@@ -113,7 +119,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
           <div className="mt-auto">
             <div
-              className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-muted-foreground opacity-60 cursor-not-allowed"
+              className="flex items-center justify-between gap-3 rounded-md px-3 py-2 text-gray-600 cursor-not-allowed"
               title="Em breve"
             >
               <div className="flex items-center gap-3">
