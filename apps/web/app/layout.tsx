@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "FetchLeads — Encontre oportunidades e aborde pelo WhatsApp",
-  description: "Encontre empresas, identifique oportunidades, gere abordagens personalizadas e organize sua prospecção com o FetchLeads.",
+  description:
+    "Encontre empresas, identifique oportunidades, gere abordagens personalizadas e organize sua prospecção com o FetchLeads.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
