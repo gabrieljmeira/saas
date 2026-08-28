@@ -3,5 +3,9 @@
   "version": "0.1.0",
   "main": "./index.ts",
   "types": "./index.ts",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.9"
+  }
 }

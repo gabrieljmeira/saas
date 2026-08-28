@@ -9,11 +9,9 @@
   "scripts": {
     "dev": "npm run dev --workspace=apps/web",
     "build": "npm run build --workspace=apps/web",
-    "lint": "npm run lint --workspace=apps/web"
-  },
-  "dependencies": {
-    "drizzle-orm": "^0.45.2",
-    "postgres": "^3.4.9"
+    "lint": "npm run lint --workspace=apps/web",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "devDependencies": {
     "next": "16.3.3",
