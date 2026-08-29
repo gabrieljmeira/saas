@@ -87,7 +87,7 @@ export async function signupAction(formData: FormData) {
       parsed.data.email === process.env.FETCHLEADS_OWNER_EMAIL
         ? "OWNER"
         : "USER";
-        
+
     try {
       await db
         .insert(profiles)

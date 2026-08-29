@@ -89,7 +89,8 @@ export function CommunityFeed({
                     <span className="font-medium text-slate-200">
                       {post.author.name}
                     </span>
-                    {(post.author.role === "OWNER" || post.author.role === "STAFF") && (
+                    {(post.author.role === "OWNER" ||
+                      post.author.role === "STAFF") && (
                       <OfficialAccountBadge variant="icon" />
                     )}
                     <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">

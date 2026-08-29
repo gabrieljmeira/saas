@@ -17,13 +17,15 @@ export function OfficialAccountBadge({
   variant = "icon",
   className = "",
 }: OfficialAccountBadgeProps) {
-  const icon = <BadgeCheck className="w-[1.1em] h-[1.1em] text-violet-400 fill-violet-900/50" />;
+  const icon = (
+    <BadgeCheck className="w-[1.1em] h-[1.1em] text-violet-400 fill-violet-900/50" />
+  );
 
   const content = (
     <div
       className={`inline-flex items-center gap-1.5 align-middle ${
-        variant !== "icon" 
-          ? "px-2 py-0.5 bg-violet-500/10 border border-violet-400/20 rounded-full text-violet-300 text-xs font-medium" 
+        variant !== "icon"
+          ? "px-2 py-0.5 bg-violet-500/10 border border-violet-400/20 rounded-full text-violet-300 text-xs font-medium"
           : ""
       } ${className}`}
       aria-label="Conta oficial da equipe FetchLeads"
