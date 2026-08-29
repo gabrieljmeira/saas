@@ -11,6 +11,11 @@ export const profiles = pgTable("profiles", {
   monthlyGoalCents: integer("monthly_goal_cents"),
   averageTicketCents: integer("average_ticket_cents"),
 
+  // Campos da Comunidade
+  username: text("username").unique(),
+  bio: text("bio"),
+  level: integer("level").default(1).notNull(),
+
   // Timestamps
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
