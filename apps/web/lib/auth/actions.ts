@@ -6,7 +6,12 @@ import { profiles } from "@saas/db/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
-import { LoginSchema, SignupSchema, ForgotPasswordSchema, ResetPasswordSchema } from "./schemas";
+import {
+  LoginSchema,
+  SignupSchema,
+  ForgotPasswordSchema,
+  ResetPasswordSchema,
+} from "./schemas";
 
 export async function loginAction(formData: FormData) {
   const supabase = await createClient();
@@ -45,9 +50,17 @@ export async function signupAction(formData: FormData) {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
 
-  const parsed = SignupSchema.safeParse({ name, email, password, confirmPassword });
+  const parsed = SignupSchema.safeParse({
+    name,
+    email,
+    password,
+    confirmPassword,
+  });
   if (!parsed.success) {
-    return { error: "Por favor, verifique os dados preenchidos.", details: parsed.error.flatten() };
+    return {
+      error: "Por favor, verifique os dados preenchidos.",
+      details: parsed.error.flatten(),
+    };
   }
 
   const { data, error } = await supabase.auth.signUp({
@@ -55,7 +68,7 @@ export async function signupAction(formData: FormData) {
     password,
     options: {
       data: { name },
-    }
+    },
   });
 
   if (error) {
@@ -63,16 +76,27 @@ export async function signupAction(formData: FormData) {
       // Safe enumeration prevention: act like it worked or return safe error
       return { error: "Este email já está em uso ou é inválido." };
     }
-    return { error: "Não foi possível criar a conta. Tente novamente mais tarde." };
+    return {
+      error: "Não foi possível criar a conta. Tente novamente mais tarde.",
+    };
   }
 
   if (data.user) {
     // Garantir criação do profile idempotente
+    const role =
+      parsed.data.email === process.env.FETCHLEADS_OWNER_EMAIL
+        ? "OWNER"
+        : "USER";
+        
     try {
-      await db.insert(profiles).values({
-        id: data.user.id,
-        name: parsed.data.name,
-      }).onConflictDoNothing();
+      await db
+        .insert(profiles)
+        .values({
+          id: data.user.id,
+          name: parsed.data.name,
+          role: role as any, // Cast to any to avoid TS issues if schema isn't fully updated in node_modules yet
+        })
+        .onConflictDoNothing();
     } catch (e) {
       console.error("Failed to create profile:", e);
     }
@@ -106,7 +130,7 @@ export async function forgotPasswordAction(formData: FormData) {
   // Não retornamos erro caso o email não exista para evitar enumeração
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     // Assuming the site runs on origin, we use the callback to redirect to reset
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback?next=/redefinir-senha`,
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/auth/callback?next=/redefinir-senha`,
   });
 
   if (error) {
@@ -123,7 +147,10 @@ export async function resetPasswordAction(formData: FormData) {
 
   const parsed = ResetPasswordSchema.safeParse({ password, confirmPassword });
   if (!parsed.success) {
-    return { error: "Senhas inválidas ou não coincidem.", details: parsed.error.flatten() };
+    return {
+      error: "Senhas inválidas ou não coincidem.",
+      details: parsed.error.flatten(),
+    };
   }
 
   const { error } = await supabase.auth.updateUser({
@@ -131,7 +158,10 @@ export async function resetPasswordAction(formData: FormData) {
   });
 
   if (error) {
-    return { error: "Sua sessão expirou ou ocorreu um erro. Solicite a redefinição novamente." };
+    return {
+      error:
+        "Sua sessão expirou ou ocorreu um erro. Solicite a redefinição novamente.",
+    };
   }
 
   redirect("/login?reset=success");

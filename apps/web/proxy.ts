@@ -9,16 +9,11 @@ const PUBLIC_ROUTES = [
   "/redefinir-senha",
   "/auth/callback",
   "/termos",
-  "/privacidade"
+  "/privacidade",
 ];
 
 // Note: /auth/callback is technically public, but it handles auth redirection itself.
-const AUTH_ROUTES = [
-  "/login",
-  "/signup",
-  "/esqueci-senha",
-  "/redefinir-senha"
-];
+const AUTH_ROUTES = ["/login", "/signup", "/esqueci-senha", "/redefinir-senha"];
 
 export default async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -29,7 +24,9 @@ export default async function proxy(request: NextRequest) {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    console.warn("Missing Supabase environment variables. Bypassing auth check.");
+    console.warn(
+      "Missing Supabase environment variables. Bypassing auth check.",
+    );
     return supabaseResponse;
   }
 
@@ -57,7 +54,7 @@ export default async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
-  
+
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
 

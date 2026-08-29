@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { MessageSquarePlus } from "lucide-react";
+import { OfficialAccountBadge } from "./OfficialAccountBadge";
 
 export function CommunityFeed({
   initialData,
@@ -74,20 +75,23 @@ export function CommunityFeed({
                   {post.author.avatarUrl ? (
                     <img
                       src={post.author.avatarUrl}
-                      alt={post.author.displayName}
+                      alt={post.author.name}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="w-full h-full bg-purple-600/20 text-purple-400 flex items-center justify-center font-bold">
-                      {post.author.displayName.charAt(0)}
+                      {post.author.name?.charAt(0) || "?"}
                     </div>
                   )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-slate-200">
-                      {post.author.displayName}
+                      {post.author.name}
                     </span>
+                    {(post.author.role === "OWNER" || post.author.role === "STAFF") && (
+                      <OfficialAccountBadge variant="icon" />
+                    )}
                     <span className="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">
                       Nv. {post.author.level}
                     </span>

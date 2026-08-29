@@ -12,7 +12,13 @@ interface PasswordFieldProps extends React.InputHTMLAttributes<HTMLInputElement>
   showStrength?: boolean;
 }
 
-export function PasswordField({ label, id, error, showStrength, ...props }: PasswordFieldProps) {
+export function PasswordField({
+  label,
+  id,
+  error,
+  showStrength,
+  ...props
+}: PasswordFieldProps) {
   const [show, setShow] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -44,7 +50,9 @@ export function PasswordField({ label, id, error, showStrength, ...props }: Pass
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={id} className={error ? "text-red-400" : ""}>{label}</Label>
+      <Label htmlFor={id} className={error ? "text-red-400" : ""}>
+        {label}
+      </Label>
       <div className="relative">
         <Input
           {...props}
@@ -68,22 +76,22 @@ export function PasswordField({ label, id, error, showStrength, ...props }: Pass
           {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
         </button>
       </div>
-      
+
       {showStrength && value.length > 0 && (
         <div className="flex items-center gap-2 mt-2">
           <div className="flex-1 flex gap-1 h-1">
             {[1, 2, 3].map((level) => (
-              <div 
-                key={level} 
+              <div
+                key={level}
                 className={`flex-1 rounded-full ${
-                  strength >= level 
-                    ? getStrengthColor() 
-                    : "bg-slate-800"
-                }`} 
+                  strength >= level ? getStrengthColor() : "bg-slate-800"
+                }`}
               />
             ))}
           </div>
-          <span className="text-xs text-slate-500 w-12 text-right">{getStrengthLabel()}</span>
+          <span className="text-xs text-slate-500 w-12 text-right">
+            {getStrengthLabel()}
+          </span>
         </div>
       )}
 

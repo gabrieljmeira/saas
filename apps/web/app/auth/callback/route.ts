@@ -14,11 +14,13 @@ export async function GET(request: Request) {
       // Validate redirect is an internal relative path to prevent open redirect
       const isSafeRedirect = next.startsWith("/") && !next.startsWith("//");
       const safeNext = isSafeRedirect ? next : "/dashboard";
-      
+
       return NextResponse.redirect(`${origin}${safeNext}`);
     }
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=Ocorreu+um+erro+na+autenticacao`);
+  return NextResponse.redirect(
+    `${origin}/login?error=Ocorreu+um+erro+na+autenticacao`,
+  );
 }

@@ -6,7 +6,7 @@ export const CommunityPostTypeEnum = z.enum([
   "strategy",
   "question",
   "template",
-  "weekly_result"
+  "weekly_result",
 ]);
 export type CommunityPostType = z.infer<typeof CommunityPostTypeEnum>;
 
@@ -14,7 +14,7 @@ export const SourceTypeEnum = z.enum([
   "manual",
   "crm_opportunity",
   "gamification_achievement",
-  "weekly_metrics"
+  "weekly_metrics",
 ]);
 export type SourceType = z.infer<typeof SourceTypeEnum>;
 
@@ -53,23 +53,31 @@ export const TemplateMetadataSchema = z.object({
 export type TemplateMetadata = z.infer<typeof TemplateMetadataSchema>;
 
 // Payloads for manual creation
-export const CreateManualPostSchema = z.object({
-  type: z.enum(["strategy", "question", "template"]),
-  content: z.string().min(1, "O conteúdo é obrigatório").max(3000, "O conteúdo é muito longo"),
-  templateMetadata: TemplateMetadataSchema.optional(), // Required if type === "template"
-}).refine(data => {
-  if (data.type === "template" && !data.templateMetadata) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Metadados do template são obrigatórios",
-  path: ["templateMetadata"],
-});
+export const CreateManualPostSchema = z
+  .object({
+    type: z.enum(["strategy", "question", "template"]),
+    content: z
+      .string()
+      .min(1, "O conteúdo é obrigatório")
+      .max(3000, "O conteúdo é muito longo"),
+    templateMetadata: TemplateMetadataSchema.optional(), // Required if type === "template"
+  })
+  .refine(
+    (data) => {
+      if (data.type === "template" && !data.templateMetadata) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Metadados do template são obrigatórios",
+      path: ["templateMetadata"],
+    },
+  );
 
 export const CreateVerifiedResultSchema = z.object({
   opportunityId: z.string().uuid(),
-  consent: z.literal(true, {
-    errorMap: () => ({ message: "O consentimento é obrigatório para compartilhar vendas." })
+  consent: z.boolean().refine((val) => val === true, {
+    message: "O consentimento é obrigatório para compartilhar vendas.",
   }),
 });
