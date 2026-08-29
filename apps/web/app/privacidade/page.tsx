@@ -62,7 +62,7 @@ export default function PrivacidadePage() {
         para treinar modelos públicos.
       </p>
 
-      <h2>6. A Comunidade "A Matilha"</h2>
+      <h2>6. A Comunidade</h2>
       <p>
         Caso você participe ativamente da comunidade interna, as informações, dicas e templates que você decidir compartilhar 
         ficarão visíveis para outros usuários da plataforma. Recomendamos que você nunca insira dados pessoais de seus leads nas publicações públicas.

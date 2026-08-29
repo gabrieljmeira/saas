@@ -78,9 +78,9 @@ export default function TermosPage() {
         julgamento humano e não damos garantias quanto aos resultados oriundos das abordagens sugeridas.
       </p>
 
-      <h2>8. Comunidade: A Matilha</h2>
+      <h2>8. Comunidade</h2>
       <p>
-        O {legalConfig.brandName} pode oferecer uma área de comunidade denominada "A Matilha", onde usuários 
+        O {legalConfig.brandName} pode oferecer uma área de comunidade, onde usuários 
         compartilham estratégias, resultados e templates de prospecção.
       </p>
       <ul>

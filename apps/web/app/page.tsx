@@ -332,7 +332,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Comunidade (A Matilha) */}
+        {/* Comunidade */}
         <section id="comunidade" className="py-24 bg-slate-950 relative overflow-hidden">
           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-600/5 blur-[100px] rounded-full pointer-events-none" />
           <div className="container mx-auto px-4 relative z-10 flex flex-col lg:flex-row items-center gap-12 max-w-6xl">
@@ -342,7 +342,7 @@ export default function Home() {
                 <span>Feature da Plataforma</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-white">
-                A Matilha
+                Comunidade
               </h2>
               <p className="text-xl text-slate-300 mb-6 font-medium">
                 Aprenda com quem também está prospectando.
