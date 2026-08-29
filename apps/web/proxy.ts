@@ -1,6 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+const PUBLIC_ROUTES = [
+  "/",
+  "/login",
+  "/signup",
+  "/esqueci-senha",
+  "/redefinir-senha",
+  "/auth/callback",
+  "/termos",
+  "/privacidade"
+];
+
+// Note: /auth/callback is technically public, but it handles auth redirection itself.
+const AUTH_ROUTES = [
+  "/login",
+  "/signup",
+  "/esqueci-senha",
+  "/redefinir-senha"
+];
+
 export default async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -10,9 +29,7 @@ export default async function proxy(request: NextRequest) {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    console.warn(
-      "Missing Supabase environment variables. Bypassing auth check.",
-    );
+    console.warn("Missing Supabase environment variables. Bypassing auth check.");
     return supabaseResponse;
   }
 
@@ -39,14 +56,23 @@ export default async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isProtectedRoute = request.nextUrl.pathname.startsWith("/dashboard");
-  const isAuthRoute = request.nextUrl.pathname === "/login";
+  const pathname = request.nextUrl.pathname;
+  
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+  const isAuthRoute = AUTH_ROUTES.includes(pathname);
 
-  if (isProtectedRoute && !user) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Protected route check
+  if (!user && !isPublicRoute) {
+    // Save intended destination
+    const nextUrl = new URL("/login", request.url);
+    if (pathname !== "/") {
+      nextUrl.searchParams.set("next", pathname);
+    }
+    return NextResponse.redirect(nextUrl);
   }
 
-  if (isAuthRoute && user) {
+  // Auth route check (logged in users shouldn't see login/signup)
+  if (user && isAuthRoute) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

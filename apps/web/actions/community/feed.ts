@@ -11,7 +11,9 @@ export async function getFeed(params: {
   limit?: number;
 }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   const userId = user?.id || null;
 
   const limit = params.limit || 20;
@@ -24,7 +26,7 @@ export async function getFeed(params: {
     if (!userId) throw new Error("UNAUTHORIZED");
     // Only posts from followed users
     conditions.push(
-      sql`${communityPosts.authorId} IN (SELECT followed_id FROM community_follows WHERE follower_id = ${userId})`
+      sql`${communityPosts.authorId} IN (SELECT followed_id FROM community_follows WHERE follower_id = ${userId})`,
     );
   }
 
@@ -35,9 +37,9 @@ export async function getFeed(params: {
         lt(communityPosts.createdAt, params.cursor.createdAt),
         and(
           eq(communityPosts.createdAt, params.cursor.createdAt),
-          lt(communityPosts.id, params.cursor.id)
-        )
-      )
+          lt(communityPosts.id, params.cursor.id),
+        ),
+      ),
     );
   }
 
@@ -52,26 +54,42 @@ export async function getFeed(params: {
       sharedTemplate: true,
     },
     extras: (post, { sql }) => ({
-      likeCount: sql<number>`CAST((SELECT COUNT(*) FROM community_likes WHERE post_id = ${post.id}) AS INTEGER)`.as("likeCount"),
-      commentCount: sql<number>`CAST((SELECT COUNT(*) FROM community_comments WHERE post_id = ${post.id}) AS INTEGER)`.as("commentCount"),
-      likedByMe: userId 
-        ? sql<boolean>`EXISTS(SELECT 1 FROM community_likes WHERE post_id = ${post.id} AND user_id = ${userId})`.as("likedByMe")
+      likeCount:
+        sql<number>`CAST((SELECT COUNT(*) FROM community_likes WHERE post_id = ${post.id}) AS INTEGER)`.as(
+          "likeCount",
+        ),
+      commentCount:
+        sql<number>`CAST((SELECT COUNT(*) FROM community_comments WHERE post_id = ${post.id}) AS INTEGER)`.as(
+          "commentCount",
+        ),
+      likedByMe: userId
+        ? sql<boolean>`EXISTS(SELECT 1 FROM community_likes WHERE post_id = ${post.id} AND user_id = ${userId})`.as(
+            "likedByMe",
+          )
         : sql<boolean>`false`.as("likedByMe"),
       savedByMe: userId
-        ? sql<boolean>`EXISTS(SELECT 1 FROM community_saved_posts WHERE post_id = ${post.id} AND user_id = ${userId})`.as("savedByMe")
+        ? sql<boolean>`EXISTS(SELECT 1 FROM community_saved_posts WHERE post_id = ${post.id} AND user_id = ${userId})`.as(
+            "savedByMe",
+          )
         : sql<boolean>`false`.as("savedByMe"),
       followingAuthor: userId
-        ? sql<boolean>`EXISTS(SELECT 1 FROM community_follows WHERE followed_id = ${post.authorId} AND follower_id = ${userId})`.as("followingAuthor")
+        ? sql<boolean>`EXISTS(SELECT 1 FROM community_follows WHERE followed_id = ${post.authorId} AND follower_id = ${userId})`.as(
+            "followingAuthor",
+          )
         : sql<boolean>`false`.as("followingAuthor"),
     }),
   });
 
   const hasNextPage = posts.length > limit;
   const items = hasNextPage ? posts.slice(0, -1) : posts;
-  
-  const nextCursor = items.length > 0
-    ? { createdAt: items[items.length - 1].createdAt, id: items[items.length - 1].id }
-    : undefined;
+
+  const nextCursor =
+    items.length > 0
+      ? {
+          createdAt: items[items.length - 1].createdAt,
+          id: items[items.length - 1].id,
+        }
+      : undefined;
 
   return {
     items,

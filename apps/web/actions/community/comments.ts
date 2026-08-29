@@ -10,7 +10,9 @@ import { z } from "zod";
 export async function createComment(postId: string, content: string) {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return { error: "UNAUTHORIZED" };
 
     const parsed = z.string().min(1).max(1000).safeParse(content);
@@ -32,12 +34,20 @@ export async function createComment(postId: string, content: string) {
 export async function deleteComment(commentId: string) {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return { error: "UNAUTHORIZED" };
 
-    const result = await db.delete(communityComments).where(
-      and(eq(communityComments.id, commentId), eq(communityComments.authorId, user.id))
-    ).returning({ id: communityComments.id });
+    const result = await db
+      .delete(communityComments)
+      .where(
+        and(
+          eq(communityComments.id, commentId),
+          eq(communityComments.authorId, user.id),
+        ),
+      )
+      .returning({ id: communityComments.id });
 
     if (result.length === 0) {
       return { error: "Comentário não encontrado ou você não tem permissão." };

@@ -3,27 +3,47 @@
 import { db } from "@saas/db/client";
 import { communityPosts } from "@saas/db/schema";
 import { createClient } from "@/lib/supabase/server";
-import { CreateVerifiedResultSchema, crmAdapter, anonymizeLeadName } from "@saas/core";
+import {
+  CreateVerifiedResultSchema,
+  crmAdapter,
+  anonymizeLeadName,
+} from "@saas/core";
 import { revalidatePath } from "next/cache";
 
-export async function createVerifiedResult(opportunityId: string, consent: boolean) {
+export async function createVerifiedResult(
+  opportunityId: string,
+  consent: boolean,
+) {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     if (!user) {
       return { error: "UNAUTHORIZED: Você precisa estar logado." };
     }
 
-    const parsed = CreateVerifiedResultSchema.safeParse({ opportunityId, consent });
+    const parsed = CreateVerifiedResultSchema.safeParse({
+      opportunityId,
+      consent,
+    });
     if (!parsed.success) {
-      return { error: "CONSENT_REQUIRED: O consentimento é obrigatório.", details: parsed.error.flatten() };
+      return {
+        error: "CONSENT_REQUIRED: O consentimento é obrigatório.",
+        details: parsed.error.flatten(),
+      };
     }
 
     // 1. Fetch from mock/adapter CRM
-    const opportunity = await crmAdapter.getWonOpportunity(opportunityId, user.id);
+    const opportunity = await crmAdapter.getWonOpportunity(
+      opportunityId,
+      user.id,
+    );
     if (!opportunity) {
-      return { error: "OPPORTUNITY_NOT_WON: Oportunidade não encontrada ou não ganha." };
+      return {
+        error: "OPPORTUNITY_NOT_WON: Oportunidade não encontrada ou não ganha.",
+      };
     }
 
     // 2. Anonymize the data (Server-side privacy check)
@@ -53,10 +73,12 @@ export async function createVerifiedResult(opportunityId: string, consent: boole
 
     revalidatePath("/community");
     return { success: true };
-
   } catch (error: any) {
     if (error?.message?.includes("community_posts_source_idx")) {
-      return { error: "DUPLICATE: Esta oportunidade já foi compartilhada na comunidade." };
+      return {
+        error:
+          "DUPLICATE: Esta oportunidade já foi compartilhada na comunidade.",
+      };
     }
     if (error?.message?.includes("SOURCE_NOT_AVAILABLE")) {
       return { error: error.message };
