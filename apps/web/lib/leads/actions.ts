@@ -60,9 +60,10 @@ export async function saveDiscoveredLeadAction(leadData: DiscoveredLead, sourceP
 
     revalidatePath("/leads");
     return { success: true, leadId: inserted[0].id, isNew: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving lead:", error);
-    if (error.code === '23505') {
+    const err = error as { code?: string };
+    if (err.code === '23505') {
       return { success: false, error: "Lead já existe na sua base." };
     }
     return { success: false, error: "Falha ao salvar lead." };
@@ -76,7 +77,7 @@ export async function updateLeadSafeAction(leadId: string, updates: { status?: s
 
   if (!user) throw new Error("Unauthorized");
   
-  const safePayload: any = { updatedAt: new Date() };
+  const safePayload: Record<string, unknown> = { updatedAt: new Date() };
   if (updates.status) safePayload.status = updates.status;
   if (updates.notes !== undefined) safePayload.notes = updates.notes;
 
@@ -141,21 +142,21 @@ export async function logInteractionAction(leadId: string, type: 'WHATSAPP_OPENE
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
 
-  // If CONTACTED, we must ensure an opportunity exists
   let oppId: string | undefined = undefined;
 
   // Always ensure opportunity exists when logging any interaction on a lead
-  // This matches the directive: "ao marcar um lead como contatado, crie/garanta a Opportunity e registre a interação nela"
   const oppRes = await createOpportunityFromLeadAction(leadId);
   oppId = oppRes.opportunityId;
 
-  await db.insert(interactions).values({
-    userId: user.id,
-    opportunityId: oppId,
-    type: type,
-    channel: channel,
-    occurredAt: new Date()
-  });
+  if (oppId) {
+    await db.insert(interactions).values({
+      userId: user.id,
+      opportunityId: oppId,
+      type: type,
+      channel: channel,
+      occurredAt: new Date()
+    });
+  }
 
   revalidatePath("/leads");
   if (oppId) revalidatePath("/pipeline");
@@ -182,7 +183,7 @@ export async function generateApproachAction(leadId: string) {
     niche: lead.niche,
     city: lead.city,
     website: lead.website,
-    scoreReasons: Array.isArray(lead.leadScoreReasons) ? lead.leadScoreReasons as any : []
+    scoreReasons: Array.isArray(lead.leadScoreReasons) ? (lead.leadScoreReasons as unknown as { label: string }[]) : []
   };
 
   const res = await generator.generate(ctx);

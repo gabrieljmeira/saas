@@ -1,10 +1,7 @@
-"use client";
-
 import { useEffect, useState, useTransition } from "react";
 import { 
   Sheet, 
   SheetContent, 
-  SheetHeader, 
   SheetTitle,
   SheetDescription
 } from "@/components/ui/sheet";
@@ -34,7 +31,7 @@ interface LeadDrawerProps {
 }
 
 export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
-  const [lead, setLead] = useState<any>(null);
+  const [lead, setLead] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
   const [approachMessage, setApproachMessage] = useState<string>("");
   const [isPending, startTransition] = useTransition();
@@ -42,9 +39,11 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
   // Fetch full details
   useEffect(() => {
     if (!open) {
-      setLead(null);
-      setApproachMessage("");
-      return;
+      const resetTimer = setTimeout(() => {
+        setLead(null);
+        setApproachMessage("");
+      }, 0);
+      return () => clearTimeout(resetTimer);
     }
 
     setLoading(true);
@@ -52,7 +51,7 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
     // Since I can't put db calls in Client Components, I will assume a server action `getLeadDetailsAction` exists.
     import("@/lib/leads/server-queries").then(mod => {
       mod.getLeadDetailsAction(leadId).then(data => {
-        setLead(data);
+        setLead(data as Record<string, unknown>);
         setLoading(false);
       });
     });
@@ -67,7 +66,10 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
     });
   };
 
-  const whatsappUrl = lead?.normalizedPhone ? generateWhatsappUrl(lead.normalizedPhone, approachMessage) : null;
+  const normalizedPhone = lead?.normalizedPhone as string | undefined;
+  const hasWhatsapp = lead?.hasWhatsapp as boolean | undefined;
+  const whatsappUrl = normalizedPhone ? generateWhatsappUrl(normalizedPhone, approachMessage) : null;
+  const leadScoreReasons = lead?.leadScoreReasons as unknown[];
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -83,19 +85,19 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
               <div className="flex justify-between items-start gap-4">
                 <div>
                   <SheetTitle className="text-2xl font-semibold text-text-primary flex items-center gap-2">
-                    {lead.name}
-                    {lead.rating && lead.rating >= 4.5 && (
+                    {lead.name as string}
+                    {(lead.rating as number) && (lead.rating as number) >= 4.5 && (
                       <CheckCircle2 className="w-5 h-5 text-blue-500" />
                     )}
                   </SheetTitle>
                   <SheetDescription className="flex items-center gap-3 mt-2 text-text-muted">
                     <span className="flex items-center gap-1">
                       <Building2 className="w-4 h-4" />
-                      {lead.niche || "Nicho desconhecido"}
+                      {(lead.niche as string) || "Nicho desconhecido"}
                     </span>
                     <span className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
-                      {lead.city || "Local não informado"}
+                      {(lead.city as string) || "Local não informado"}
                     </span>
                   </SheetDescription>
                 </div>
@@ -103,10 +105,10 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
                 <div className="text-right">
                   <div className="text-xs text-text-muted uppercase tracking-wider mb-1">Score</div>
                   <Badge variant="outline" className={`text-lg px-3 py-1 ${
-                    lead.leadScore >= 70 ? 'border-primary/30 text-primary bg-primary/5' : 
-                    lead.leadScore >= 40 ? 'border-orange-500/30 text-orange-500 bg-orange-500/5' : ''
+                    (lead.leadScore as number) >= 70 ? 'border-primary/30 text-primary bg-primary/5' : 
+                    (lead.leadScore as number) >= 40 ? 'border-orange-500/30 text-orange-500 bg-orange-500/5' : ''
                   }`}>
-                    {lead.leadScore || 0}/100
+                    {(lead.leadScore as number) || 0}/100
                   </Badge>
                 </div>
               </div>
@@ -122,12 +124,12 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
                     <XCircle className="w-3 h-3" /> Sem Site
                   </Badge>
                 )}
-                {lead.hasWhatsapp && (
+                {hasWhatsapp && (
                   <Badge variant="secondary" className="bg-green-500/10 text-green-500 border-transparent font-normal gap-1">
                     <Smartphone className="w-3 h-3" /> WhatsApp
                   </Badge>
                 )}
-                {lead.instagram && (
+                {Boolean(lead.instagram) && (
                   <Badge variant="secondary" className="bg-pink-500/10 text-pink-500 border-transparent font-normal gap-1">
                     <Star className="w-3 h-3" /> Instagram
                   </Badge>
@@ -138,21 +140,23 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
             <div className="flex-1 p-6 md:p-8 space-y-8">
               
               {/* Score Reasons */}
-              {lead.leadScoreReasons && Array.isArray(lead.leadScoreReasons) && lead.leadScoreReasons.length > 0 && (
+              {leadScoreReasons && Array.isArray(leadScoreReasons) && leadScoreReasons.length > 0 && (
                 <div className="space-y-3">
                   <h4 className="text-sm font-semibold uppercase tracking-wider text-text-secondary">Análise do Score</h4>
                   <ul className="space-y-2">
-                    {lead.leadScoreReasons.map((r: any, i: number) => (
+                    {leadScoreReasons.map((r: unknown, i: number) => {
+                      const reason = r as { label: string; impact: number };
+                      return (
                       <li key={i} className="flex items-start justify-between text-sm text-text-muted bg-surface p-2 rounded border border-border-subtle">
                         <div className="flex items-center gap-2">
                           <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
-                          {r.label}
+                          {reason.label}
                         </div>
                         <Badge variant="outline" className="text-xs bg-surface-elevated">
-                          {r.impact > 0 ? '+' : ''}{r.impact}
+                          {reason.impact > 0 ? '+' : ''}{reason.impact}
                         </Badge>
                       </li>
-                    ))}
+                    )})}
                   </ul>
                 </div>
               )}
@@ -199,9 +203,9 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
             <div className="p-6 bg-surface border-t border-border-default flex gap-3">
               {whatsappUrl ? (
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                  <Button variant="outline" disabled={!lead.normalizedPhone} className="w-full">
+                  <Button variant="outline" disabled={!normalizedPhone} className="w-full">
                     <MessageSquare className="w-4 h-4 mr-2" />
-                    {lead.hasWhatsapp ? 'Abrir WhatsApp' : 'Testar WhatsApp'}
+                    {hasWhatsapp ? 'Abrir WhatsApp' : 'Testar WhatsApp'}
                   </Button>
                 </a>
               ) : (

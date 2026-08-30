@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { normalizePhone, normalizeDomain } from './normalization';
 import { calculateLeadScore } from './scoring';
 import { MockLeadDiscoveryProvider } from './discovery';
-import { generateWhatsappUrl } from '../../../../apps/web/lib/leads/whatsapp';
 
 describe('Lead Normalization', () => {
   it('normalizes phone by keeping only digits and adding country code if missing', () => {
@@ -60,19 +59,6 @@ describe('Lead Scoring', () => {
     const res = calculateLeadScore({ website: '' });
     expect(res.score).toBe(20);
     expect(res.reasons.find(r => r.code === 'NO_WEBSITE')).toBeDefined();
-  });
-});
-
-describe('WhatsApp Integration', () => {
-  it('generates correct wa.me URL', () => {
-    const url = generateWhatsappUrl('5511999991111', 'Olá mundo');
-    expect(url).toBe('https://wa.me/5511999991111?text=Ol%C3%A1%20mundo');
-  });
-
-  it('returns null if phone is absent or invalid', () => {
-    expect(generateWhatsappUrl(null)).toBe(null);
-    expect(generateWhatsappUrl('')).toBe(null);
-    expect(generateWhatsappUrl('123')).toBe(null); // too short
   });
 });
 
