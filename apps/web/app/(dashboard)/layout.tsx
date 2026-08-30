@@ -39,15 +39,15 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-950 text-slate-100">
+    <div className="flex h-screen overflow-hidden bg-background text-text-primary">
       {/* Sidebar for Desktop */}
       <AppSidebar />
 
       {/* Main Column */}
       <div className="flex flex-1 flex-col overflow-hidden w-full">
-        <AppTopbar profile={profile} />
+        <AppTopbar />
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-950">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-background">
           {children}
         </main>
       </div>
