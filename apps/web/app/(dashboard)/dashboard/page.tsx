@@ -4,7 +4,16 @@ import { createClient } from "@/lib/supabase/server";
 import { db } from "@saas/db/client";
 import { profiles } from "@saas/db/schema";
 import { eq } from "drizzle-orm";
-import { Search, Users, PhoneForwarded, Target, MessageSquare, ArrowRight } from "lucide-react";
+import { 
+  Search, 
+  Users, 
+  Target, 
+  ArrowRight,
+  TrendingUp,
+  MapPin,
+  Building,
+  CheckCircle2
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default async function DashboardPage() {
@@ -24,87 +33,96 @@ export default async function DashboardPage() {
   const profile = profileResult[0];
   const firstName = profile?.name ? profile.name.split(" ")[0] : "Empreendedor";
 
-  // Using real icons but zeroed numbers for the first-use empty state
-  const metrics = [
-    { name: "Leads encontrados", value: "0", icon: Search, color: "text-slate-400" },
-    { name: "Contatos realizados", value: "0", icon: PhoneForwarded, color: "text-slate-400" },
-    { name: "Respostas", value: "0", icon: MessageSquare, color: "text-slate-400" },
-    { name: "Vendas", value: "0", icon: Target, color: "text-slate-400" },
-  ];
-
   return (
-    <div className="flex-1 space-y-8 p-4 pt-6 md:p-8">
+    <div className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-8">
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl md:text-3xl font-semibold text-text-primary tracking-tight">
             Bom dia, {firstName}.
           </h2>
-          <p className="text-slate-400 mt-1">
-            Acompanhe sua prospecção e veja o que merece sua atenção hoje.
+          <p className="text-text-muted mt-1 text-sm md:text-base">
+            Seu pipeline está vazio no momento. Vamos encontrar sua próxima venda.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          {/* Action button disabled visually because it's not implemented yet */}
-          <Button className="bg-purple-600 hover:bg-purple-700 text-white cursor-not-allowed opacity-80" aria-disabled="true" title="Em breve">
-            <Search className="w-4 h-4 mr-2" />
-            Buscar leads
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((metric) => (
-          <div key={metric.name} className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-slate-400">{metric.name}</p>
-              <metric.icon className={`h-4 w-4 ${metric.color}`} />
-            </div>
-            <div className="mt-4">
-              <h3 className="text-3xl font-bold text-white">{metric.value}</h3>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-        <div className="col-span-4 rounded-xl border border-slate-800/80 bg-slate-900/80 p-8 shadow-sm flex flex-col justify-center relative overflow-hidden group">
-          <div className="absolute right-0 top-0 w-64 h-64 bg-purple-600/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none transition-transform group-hover:scale-110 duration-700" />
-          
-          <div className="relative z-10 max-w-md">
-            <div className="inline-flex items-center rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-1 text-xs font-semibold text-purple-300 mb-4">
-              Primeiros passos
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">
-              Comece sua primeira prospecção
-            </h3>
-            <p className="text-slate-400 mb-6 text-sm md:text-base">
-              Encontre empresas da sua região que precisam do seu serviço e monte seu pipeline de oportunidades reais de venda.
-            </p>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white cursor-not-allowed opacity-80" aria-disabled="true" title="Em breve">
-              Buscar primeira oportunidade <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
-        </div>
-
-        <div className="col-span-3 rounded-xl border border-slate-800/80 bg-slate-900/50 p-6 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-slate-800 rounded-lg border border-slate-700/50">
-                <Users className="w-5 h-5 text-slate-300" />
-              </div>
-              <h3 className="text-lg font-bold text-white">A Matilha</h3>
-            </div>
-            <p className="text-slate-400 text-sm mb-6">
-              Veja resultados e estratégias de outros usuários que estão fechando vendas todos os dias na comunidade oficial do FetchLeads.
-            </p>
-          </div>
-          <Link href="/community">
-            <Button variant="outline" className="w-full bg-slate-900/50 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
-              Abrir comunidade
+        <div className="flex items-center gap-3">
+          <Link href="/leads">
+            <Button className="w-full md:w-auto">
+              <Search className="w-4 h-4" />
+              Procurar empresas
             </Button>
           </Link>
         </div>
       </div>
+
+      {/* Main Onboarding Hero */}
+      <div className="rounded-2xl border border-border-subtle bg-surface-elevated overflow-hidden shadow-sm relative group">
+        <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
+        
+        <div className="p-8 md:p-12 relative z-10 max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            Configuração Inicial
+          </div>
+          
+          <h3 className="text-2xl font-bold text-text-primary mb-3">
+            O motor de vendas do seu negócio
+          </h3>
+          <p className="text-text-secondary text-base md:text-lg mb-8 leading-relaxed">
+            O FetchLeads encontra empresas da sua região no Google Maps, extrai os contatos públicos e organiza tudo em um CRM completo focado na conversão final.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/leads">
+              <Button size="lg" className="w-full sm:w-auto">
+                Fazer primeira busca <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+            <Link href="/community">
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto text-text-primary">
+                Ver o que os outros estão fazendo
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Feature Value Props (replaces empty 4 generic cards) */}
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="rounded-xl border border-border-default bg-surface p-6">
+          <div className="w-10 h-10 rounded-lg bg-surface-elevated border border-border-subtle flex items-center justify-center mb-4">
+            <MapPin className="w-5 h-5 text-primary" />
+          </div>
+          <h4 className="text-base font-semibold text-text-primary mb-2">Busca Inteligente</h4>
+          <p className="text-text-muted text-sm leading-relaxed">
+            Mapeie regiões inteiras e encontre milhares de negócios locais classificados por avaliações.
+          </p>
+        </div>
+        
+        <div className="rounded-xl border border-border-default bg-surface p-6">
+          <div className="w-10 h-10 rounded-lg bg-surface-elevated border border-border-subtle flex items-center justify-center mb-4">
+            <Target className="w-5 h-5 text-accent" />
+          </div>
+          <h4 className="text-base font-semibold text-text-primary mb-2">CRM Integrado</h4>
+          <p className="text-text-muted text-sm leading-relaxed">
+            Leve o lead desde o primeiro contato frio até o contrato assinado, com follow-ups garantidos.
+          </p>
+        </div>
+        
+        <div className="rounded-xl border border-border-default bg-surface p-6">
+          <div className="w-10 h-10 rounded-lg bg-surface-elevated border border-border-subtle flex items-center justify-center mb-4">
+            <TrendingUp className="w-5 h-5 text-success" />
+          </div>
+          <h4 className="text-base font-semibold text-text-primary mb-2">Metas e Financeiro</h4>
+          <p className="text-text-muted text-sm leading-relaxed">
+            Trabalhe por objetivos mensais e veja seu faturamento potencial e real de forma visual.
+          </p>
+        </div>
+      </div>
+      
     </div>
   );
 }

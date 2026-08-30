@@ -61,7 +61,7 @@ export function CommunityFeed({
             </h3>
             <p className="text-slate-400 text-sm max-w-sm mx-auto">
               O Cyber-Caramelo ainda não encontrou movimentação por aqui.
-              Compartilhe uma estratégia, resultado ou dúvida com a Matilha.
+              Compartilhe uma estratégia, resultado ou dúvida com a Comunidade.
             </p>
           </div>
         ) : (

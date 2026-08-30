@@ -8,11 +8,11 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 bg-slate-950 text-slate-100">
+    <div className="min-h-screen grid lg:grid-cols-2 bg-background text-text-primary">
       {/* BRANDING SIDE - Hidden on mobile */}
-      <div className="hidden lg:flex flex-col justify-between p-12 bg-slate-900 border-r border-slate-800 relative overflow-hidden">
+      <div className="hidden lg:flex flex-col justify-between p-12 bg-surface-elevated border-r border-border-default relative overflow-hidden">
         {/* Background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative z-10">
           <Link href="/" className="inline-block">
@@ -33,64 +33,62 @@ export default function AuthLayout({
             <br />
             Comece conversas.
           </h1>
-          <p className="text-lg text-slate-400 mb-12">
+          <p className="text-lg text-text-secondary mb-12 leading-relaxed">
             A plataforma B2B que centraliza prospecção, CRM e follow-ups em um
             único fluxo de trabalho ágil.
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex items-start gap-4">
-              <div className="mt-1 bg-purple-500/10 p-2 rounded-lg text-purple-400 border border-purple-500/20">
+              <div className="mt-1 bg-primary/10 p-2.5 rounded-lg text-primary border border-primary/20">
                 <Target className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-200">
+                <h3 className="font-semibold text-text-primary">
                   Prospecção Assertiva
                 </h3>
-                <p className="text-slate-400 text-sm mt-1">
-                  Dados enriquecidos de empresas e tomadores de decisão em
-                  segundos.
+                <p className="text-text-muted text-sm mt-1.5 leading-relaxed">
+                  Dados de empresas locais capturados e organizados em segundos com ajuda de IA.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="mt-1 bg-purple-500/10 p-2 rounded-lg text-purple-400 border border-purple-500/20">
+              <div className="mt-1 bg-primary/10 p-2.5 rounded-lg text-primary border border-primary/20">
                 <Users className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-200">CRM Integrado</h3>
-                <p className="text-slate-400 text-sm mt-1">
-                  Organize seus leads com um kanban veloz feito para quem vende.
+                <h3 className="font-semibold text-text-primary">CRM Integrado</h3>
+                <p className="text-text-muted text-sm mt-1.5 leading-relaxed">
+                  Organize seus leads com um pipeline veloz feito para fechar vendas B2B.
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="mt-1 bg-purple-500/10 p-2 rounded-lg text-purple-400 border border-purple-500/20">
+              <div className="mt-1 bg-primary/10 p-2.5 rounded-lg text-primary border border-primary/20">
                 <Zap className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-200">
-                  WhatsApp 1-Clique
+                <h3 className="font-semibold text-text-primary">
+                  Ação 1-Clique
                 </h3>
-                <p className="text-slate-400 text-sm mt-1">
-                  Não perca tempo salvando contatos. Aborde diretamente com seus
-                  templates.
+                <p className="text-text-muted text-sm mt-1.5 leading-relaxed">
+                  Não perca tempo copiando contatos. Aborde diretamente pelo WhatsApp.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="relative z-10 text-sm text-slate-500 font-medium">
+        <div className="relative z-10 text-sm text-text-muted font-medium">
           © {new Date().getFullYear()} FetchLeads. Todos os direitos reservados.
         </div>
       </div>
 
       {/* FORM SIDE */}
-      <div className="flex items-center justify-center p-6 lg:p-12">
-        <div className="w-full max-w-md">
+      <div className="flex items-center justify-center p-6 lg:p-12 relative">
+        <div className="w-full max-w-sm relative z-10">
           {/* Mobile Logo */}
           <div className="lg:hidden flex justify-center mb-10">
             <Link href="/">

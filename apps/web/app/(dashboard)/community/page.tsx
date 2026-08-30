@@ -11,11 +11,11 @@ export default async function CommunityPage({
   const initialFeed = await getFeed({ tab, limit: 20 });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-background text-slate-100">
       <div className="container mx-auto px-4 py-8 max-w-3xl">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">A Matilha</h1>
-          <p className="text-slate-400">
+          <h1 className="text-3xl font-bold text-text-primary mb-2">Comunidade</h1>
+          <p className="text-text-muted">
             Resultados, estratégias e aprendizados de quem está prospectando de
             verdade.
           </p>
