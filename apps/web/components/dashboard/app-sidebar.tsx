@@ -14,6 +14,8 @@ import {
   Settings 
 } from "lucide-react";
 
+import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
+
 const navigationGroups = [
   {
     label: null,
@@ -31,16 +33,12 @@ const navigationGroups = [
     ],
   },
   {
-    label: "Desempenho",
+    label: "Gestão",
     items: [
       { name: "Metas", href: "/metas", icon: Target },
       { name: "Financeiro", href: "/financeiro", icon: DollarSign },
-    ],
-  },
-  {
-    label: "Social",
-    items: [
       { name: "Comunidade", href: "/community", icon: Users },
+      { name: "Configurações", href: "/configuracoes", icon: Settings },
     ],
   },
 ];
@@ -51,10 +49,7 @@ export function AppSidebar() {
   return (
     <aside className="hidden md:flex w-[240px] shrink-0 flex-col bg-surface border-r border-border-default h-screen sticky top-0">
       <div className="h-16 px-6 flex items-center gap-3 border-b border-border-subtle shrink-0">
-        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-sm">
-          <span className="font-bold text-primary-foreground text-sm leading-none">FL</span>
-        </div>
-        <span className="text-lg font-bold text-text-primary tracking-tight">FetchLeads</span>
+        <FetchLeadsLogo variant="default" href="/" className="hover:opacity-100" />
       </div>
 
       <nav className="flex-1 px-3 py-6 flex flex-col gap-6 overflow-y-auto">

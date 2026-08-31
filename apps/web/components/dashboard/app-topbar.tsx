@@ -18,6 +18,7 @@ import {
   Bell
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
 import { Input } from "@/components/ui/input";
 
 const navigationGroups = [
@@ -64,9 +65,7 @@ export function AppTopbar() {
           <Button variant="ghost" size="icon-sm" onClick={() => setIsOpen(true)} className="text-text-muted hover:text-text-primary">
             <Menu className="w-5 h-5" />
           </Button>
-          <div className="w-7 h-7 bg-primary rounded-md flex items-center justify-center font-bold text-white text-xs">
-            FL
-          </div>
+          <FetchLeadsLogo variant="icon" href="/" className="w-7 h-7 hover:opacity-90" />
         </div>
 
         {/* Desktop Left: Global Search */}
@@ -109,10 +108,7 @@ export function AppTopbar() {
           <aside className="w-[280px] bg-surface h-full flex flex-col relative z-50 animate-in slide-in-from-left duration-200 shadow-xl">
             <div className="h-16 px-6 flex items-center justify-between border-b border-border-subtle shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center font-bold text-white text-sm shadow-sm">
-                  FL
-                </div>
-                <span className="text-lg font-bold text-text-primary tracking-tight">FetchLeads</span>
+                <FetchLeadsLogo variant="default" href="/" />
               </div>
               <Button variant="ghost" size="icon-sm" onClick={() => setIsOpen(false)} className="text-text-muted hover:text-text-primary">
                 <X className="w-5 h-5" />

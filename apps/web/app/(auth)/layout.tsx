@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Target, Users, Zap } from "lucide-react";
+import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
 
 export default function AuthLayout({
   children,
@@ -16,16 +16,7 @@ export default function AuthLayout({
         <div className="absolute -bottom-[20%] -right-[20%] w-[600px] h-[600px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 flex items-center gap-3">
-          <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
-            <Image
-              src="/logonavbar.avif"
-              alt="FetchLeads"
-              width={160}
-              height={36}
-              className="h-7 w-auto sm:h-8"
-              priority
-            />
-          </Link>
+          <FetchLeadsLogo />
         </div>
 
         <div className="relative z-10 mt-auto mb-auto max-w-xl pr-8">
@@ -76,16 +67,7 @@ export default function AuthLayout({
       <div className="flex flex-col relative w-full h-[100dvh] overflow-y-auto">
         {/* Mobile Header (Only visible on small screens) */}
         <div className="md:hidden flex items-center justify-between p-6 border-b border-border-default bg-surface/50 backdrop-blur-md sticky top-0 z-20">
-          <Link href="/">
-            <Image
-              src="/logonavbar.avif"
-              alt="FetchLeads"
-              width={140}
-              height={32}
-              className="h-6 w-auto"
-              priority
-            />
-          </Link>
+          <FetchLeadsLogo />
         </div>
 
         <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12 w-full max-w-[480px] mx-auto z-10">
