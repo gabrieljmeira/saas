@@ -78,8 +78,8 @@ export function AppTopbar() {
             <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-text-muted group-focus-within:text-primary transition-colors">
               <Search className="w-4 h-4" />
             </div>
-            <Input 
-              placeholder="Pesquisar empresas, leads, e configurações..." 
+            <Input
+              placeholder="Pesquisar empresas, leads, e configurações..."
               className="w-full pl-10 pr-14 h-10 bg-surface-elevated/50 hover:bg-surface-elevated focus:bg-surface-elevated border-transparent hover:border-border-subtle focus:border-primary/30 rounded-lg text-sm shadow-none transition-all"
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
@@ -92,17 +92,21 @@ export function AppTopbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3 md:gap-5 ml-auto">
-          <Button variant="ghost" size="icon" className="text-text-muted hover:text-text-primary relative rounded-full h-9 w-9">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-text-muted hover:text-text-primary relative rounded-full h-9 w-9"
+          >
             <Bell className="w-4 h-4" />
             <span className="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full border-2 border-surface animate-pulse" />
           </Button>
-          
+
           <div className="h-5 w-px bg-border-subtle hidden md:block" />
-          
+
           <Link href="/configuracoes" className="flex items-center gap-3 group">
-             <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs group-hover:bg-primary/20 transition-colors">
-               FL
-             </div>
+            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs group-hover:bg-primary/20 transition-colors">
+              FL
+            </div>
           </Link>
         </div>
       </header>
@@ -148,7 +152,7 @@ export function AppTopbar() {
                         onClick={() => setIsOpen(false)}
                         className={`group flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-sm ${
                           isActive
-                            ? "text-primary font-medium bg-surface-hover"
+                            ? "text-text-primary font-medium bg-primary/10"
                             : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
                         }`}
                       >
@@ -169,7 +173,7 @@ export function AppTopbar() {
                 onClick={() => setIsOpen(false)}
                 className={`group flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-sm ${
                   pathname.startsWith("/configuracoes")
-                    ? "text-primary font-medium bg-surface-hover"
+                    ? "text-text-primary font-medium bg-primary/10"
                     : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
                 }`}
               >

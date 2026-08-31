@@ -8,28 +8,37 @@ interface LeadScoreProps {
   showLabel?: boolean;
 }
 
-export function LeadScore({ score, className, size = "md", showLabel = false }: LeadScoreProps) {
-  // Score logic
-  const isHigh = score >= 80;
-  const isMedium = score >= 50 && score < 80;
-  const isLow = score < 50;
+export function LeadScore({
+  score,
+  className,
+  size = "md",
+  showLabel = false,
+}: LeadScoreProps) {
+  // Score logic (0-29: baixo, 30-59: moderado, 60-79: alta, 80-100: qualificado)
+  const isQualified = score >= 80;
+  const isHigh = score >= 60 && score < 80;
+  const isMedium = score >= 30 && score < 60;
+  const isLow = score < 30;
 
   const getColors = () => {
-    if (isHigh) return "bg-success/10 text-success border-success/20";
-    if (isMedium) return "bg-accent/10 text-accent border-accent/20";
+    if (isQualified) return "bg-primary/10 text-primary border-primary/20";
+    if (isHigh) return "bg-accent/10 text-accent border-accent/20";
+    if (isMedium) return "bg-warning/10 text-warning border-warning/20";
     return "bg-text-muted/10 text-text-muted border-border-default";
   };
 
   const getIcon = () => {
-    if (isHigh) return <Flame className="w-full h-full fill-current" />;
+    if (isQualified) return <CheckCircle2 className="w-full h-full fill-current/20" />;
+    if (isHigh) return <Flame className="w-full h-full fill-current/20" />;
     if (isMedium) return <Zap className="w-full h-full" />;
     return <ShieldAlert className="w-full h-full" />;
   };
 
   const getLabel = () => {
+    if (isQualified) return "Qualificado";
     if (isHigh) return "Alta Oportunidade";
-    if (isMedium) return "Oportunidade Média";
-    return "Baixa Prioridade";
+    if (isMedium) return "Potencial Moderado";
+    return "Baixo Potencial";
   };
 
   const sizeClasses = {
@@ -46,23 +55,27 @@ export function LeadScore({ score, className, size = "md", showLabel = false }: 
 
   return (
     <div className={cn("flex flex-col items-end gap-1", className)}>
-      <div 
+      <div
         className={cn(
-          "inline-flex items-center font-bold rounded-md border",
+          "inline-flex items-center font-bold rounded-md border uppercase tracking-wide",
           getColors(),
-          sizeClasses[size]
+          sizeClasses[size],
         )}
       >
-        <div className={iconSizes[size]}>
-          {getIcon()}
-        </div>
+        <div className={iconSizes[size]}>{getIcon()}</div>
         <span>{score}</span>
       </div>
       {showLabel && (
-        <span className={cn(
-          "text-text-muted font-medium",
-          size === "sm" ? "text-[9px]" : size === "md" ? "text-[10px]" : "text-xs"
-        )}>
+        <span
+          className={cn(
+            "text-text-muted font-medium",
+            size === "sm"
+              ? "text-[9px]"
+              : size === "md"
+                ? "text-[10px]"
+                : "text-xs",
+          )}
+        >
           {getLabel()}
         </span>
       )}

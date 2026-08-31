@@ -79,7 +79,7 @@ export function CommunityFeed({
             {/* Header: Type of Post Context */}
             <div className="px-5 py-3 border-b border-border-subtle bg-surface-elevated/30 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {post.type === "result" && <TrendingUp className="w-4 h-4 text-[#25D366]" />}
+                {post.type === "result" && <TrendingUp className="w-4 h-4 text-success" />}
                 {post.type === "strategy" && <HelpCircle className="w-4 h-4 text-accent" />}
                 {post.type === "template" && <FileText className="w-4 h-4 text-primary" />}
                 <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
@@ -88,7 +88,7 @@ export function CommunityFeed({
               </div>
               
               {post.isVerified && (
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#25D366]/10 text-[#25D366] text-[10px] font-bold rounded-md border border-[#25D366]/20 uppercase tracking-wide">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-success/10 text-success text-[10px] font-bold rounded-md border border-success/20 uppercase tracking-wide">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Resultado Verificado
                 </div>
@@ -132,7 +132,7 @@ export function CommunityFeed({
               {post.type === "result" && post.metadata?.amountCents && (
                 <div className="bg-surface-elevated/50 rounded-lg p-5 border border-border-subtle mb-6">
                   <div className="text-2xl font-bold text-text-primary mb-5 flex items-baseline gap-2">
-                    <span className="text-[#25D366]">
+                    <span className="text-success">
                       {(post.metadata.amountCents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                     </span>
                     <span className="text-xs text-text-muted font-normal uppercase tracking-wider">Fechado</span>

@@ -113,7 +113,7 @@ export default async function PipelinePage() {
                       </Button>
                     </div>
                     
-                    <div className="text-sm font-bold text-success mb-3">
+                    <div className="text-sm font-bold text-text-primary mb-3">
                       {card.value}
                     </div>
                     
@@ -127,7 +127,7 @@ export default async function PipelinePage() {
                       
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] text-text-muted font-medium mr-1">{card.time}</span>
-                        <div className="w-6 h-6 rounded bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366]/20 transition-colors">
+                        <div className="w-6 h-6 rounded bg-success/10 text-success flex items-center justify-center hover:bg-success/20 transition-colors">
                           <MessageSquare className="w-3 h-3" />
                         </div>
                       </div>

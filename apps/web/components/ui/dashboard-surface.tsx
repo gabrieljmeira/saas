@@ -5,20 +5,21 @@ interface DashboardSurfaceProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "elevated" | "accent";
 }
 
-export function DashboardSurface({ 
-  children, 
-  variant = "default", 
-  className, 
-  ...props 
+export function DashboardSurface({
+  children,
+  variant = "default",
+  className,
+  ...props
 }: DashboardSurfaceProps) {
   return (
-    <div 
+    <div
       className={cn(
-        "rounded-xl border relative overflow-hidden",
+        "rounded-lg border relative overflow-hidden",
         variant === "default" && "bg-surface border-border-default shadow-sm",
-        variant === "elevated" && "bg-surface-elevated border-border-subtle shadow-md",
+        variant === "elevated" &&
+          "bg-surface-elevated border-border-subtle shadow-md",
         variant === "accent" && "bg-surface border-primary/20 shadow-sm",
-        className
+        className,
       )}
       {...props}
     >

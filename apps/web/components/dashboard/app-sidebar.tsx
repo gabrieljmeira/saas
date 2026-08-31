@@ -33,12 +33,16 @@ const navigationGroups = [
     ],
   },
   {
-    label: "Gestão",
+    label: "Desempenho",
     items: [
       { name: "Metas", href: "/metas", icon: Target },
       { name: "Financeiro", href: "/financeiro", icon: DollarSign },
+    ],
+  },
+  {
+    label: "Social",
+    items: [
       { name: "Comunidade", href: "/community", icon: Users },
-      { name: "Configurações", href: "/configuracoes", icon: Settings },
     ],
   },
 ];
@@ -68,22 +72,29 @@ export function AppSidebar() {
               {group.items.map((item) => {
                 const isActive = pathname.startsWith(item.href);
                 const Icon = item.icon;
-                
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={cn(
                       "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm",
-                      isActive 
-                        ? "text-primary font-medium bg-primary/10" 
-                        : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+                      isActive
+                        ? "text-text-primary font-medium bg-primary/10"
+                        : "text-text-secondary hover:text-text-primary hover:bg-surface-hover",
                     )}
                   >
                     {isActive && (
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full" />
                     )}
-                    <Icon className={cn("w-4 h-4 transition-colors", isActive ? "text-primary" : "text-text-muted group-hover:text-text-primary")} />
+                    <Icon
+                      className={cn(
+                        "w-4 h-4 transition-colors",
+                        isActive
+                          ? "text-primary"
+                          : "text-text-muted group-hover:text-text-primary",
+                      )}
+                    />
                     <span>{item.name}</span>
                   </Link>
                 );
@@ -99,14 +110,21 @@ export function AppSidebar() {
           className={cn(
             "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm",
             pathname.startsWith("/configuracoes")
-              ? "text-primary font-medium bg-primary/10" 
-              : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+              ? "text-text-primary font-medium bg-primary/10"
+              : "text-text-secondary hover:text-text-primary hover:bg-surface-hover",
           )}
         >
           {pathname.startsWith("/configuracoes") && (
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full" />
           )}
-          <Settings className={cn("w-4 h-4 transition-colors", pathname.startsWith("/configuracoes") ? "text-primary" : "text-text-muted group-hover:text-text-primary")} />
+          <Settings
+            className={cn(
+              "w-4 h-4 transition-colors",
+              pathname.startsWith("/configuracoes")
+                ? "text-primary"
+                : "text-text-muted group-hover:text-text-primary",
+            )}
+          />
           <span>Configurações</span>
         </Link>
       </div>
