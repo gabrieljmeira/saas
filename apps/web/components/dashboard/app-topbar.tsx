@@ -73,38 +73,36 @@ export function AppTopbar() {
         </div>
 
         {/* Desktop Left: Global Search */}
-        <div className="hidden md:flex items-center flex-1 max-w-md">
-          <div className="relative w-full">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-            <Input
-              placeholder="Buscar leads, contatos, tarefas..."
-              className="w-full pl-9 h-9 bg-surface-elevated border-border-subtle focus-visible:ring-primary rounded-md text-sm"
+        <div className="hidden md:flex items-center flex-1 max-w-lg">
+          <div className="relative w-full group">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-text-muted group-focus-within:text-primary transition-colors">
+              <Search className="w-4 h-4" />
+            </div>
+            <Input 
+              placeholder="Pesquisar empresas, leads, e configurações..." 
+              className="w-full pl-10 pr-14 h-10 bg-surface-elevated/50 hover:bg-surface-elevated focus:bg-surface-elevated border-transparent hover:border-border-subtle focus:border-primary/30 rounded-lg text-sm shadow-none transition-all"
             />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              <kbd className="hidden lg:inline-flex items-center gap-1 rounded border border-border-subtle bg-surface px-1.5 font-mono text-[10px] font-medium text-text-muted">
-                <span className="text-xs">⌘</span>K
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
+              <kbd className="hidden lg:inline-flex items-center gap-0.5 rounded-md border border-border-strong bg-surface px-2 py-0.5 font-mono text-[10px] font-semibold text-text-muted">
+                ⌘K
               </kbd>
             </div>
           </div>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3 md:gap-4 ml-auto">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="text-text-muted hover:text-text-primary relative"
-          >
+        <div className="flex items-center gap-3 md:gap-5 ml-auto">
+          <Button variant="ghost" size="icon" className="text-text-muted hover:text-text-primary relative rounded-full h-9 w-9">
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-accent rounded-full border border-surface"></span>
+            <span className="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full border-2 border-surface animate-pulse" />
           </Button>
-
-          <div className="h-4 w-px bg-border-subtle hidden md:block"></div>
-
-          <Link href="/configuracoes" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-medium text-sm">
-              US
-            </div>
+          
+          <div className="h-5 w-px bg-border-subtle hidden md:block" />
+          
+          <Link href="/configuracoes" className="flex items-center gap-3 group">
+             <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs group-hover:bg-primary/20 transition-colors">
+               FL
+             </div>
           </Link>
         </div>
       </header>

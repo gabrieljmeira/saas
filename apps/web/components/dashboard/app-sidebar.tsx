@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -56,49 +58,56 @@ export function AppSidebar() {
 
       <nav className="flex-1 px-3 py-6 flex flex-col gap-6 overflow-y-auto">
         {navigationGroups.map((group, i) => (
-          <div key={i} className="flex flex-col gap-1.5">
+          <div key={i} className="flex flex-col gap-1">
             {group.label && (
-              <h4 className="text-[11px] font-semibold text-text-muted uppercase tracking-widest mb-1 px-3">
+              <h4 className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2 px-3">
                 {group.label}
               </h4>
             )}
-            {group.items.map((item) => {
-              const isActive =
-                pathname === item.href || pathname.startsWith(`${item.href}/`);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`group flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 text-sm ${
-                    isActive
-                      ? "text-primary font-medium bg-surface-hover"
-                      : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
-                  }`}
-                >
-                  <item.icon
-                    className={`w-4 h-4 transition-colors ${isActive ? "text-primary" : "text-text-muted group-hover:text-text-primary"}`}
-                  />
-                  {item.name}
-                </Link>
-              );
-            })}
+            <div className="flex flex-col gap-0.5">
+              {group.items.map((item) => {
+                const isActive = pathname.startsWith(item.href);
+                const Icon = item.icon;
+                
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm",
+                      isActive 
+                        ? "text-primary font-medium bg-primary/10" 
+                        : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+                    )}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full" />
+                    )}
+                    <Icon className={cn("w-4 h-4 transition-colors", isActive ? "text-primary" : "text-text-muted group-hover:text-text-primary")} />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         ))}
       </nav>
 
-      <div className="p-3 border-t border-border-subtle shrink-0">
+      <div className="p-4 border-t border-border-subtle shrink-0">
         <Link
           href="/configuracoes"
-          className={`group flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 text-sm ${
+          className={cn(
+            "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm",
             pathname.startsWith("/configuracoes")
-              ? "text-primary font-medium bg-surface-hover"
+              ? "text-primary font-medium bg-primary/10" 
               : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
-          }`}
+          )}
         >
-          <Settings
-            className={`w-4 h-4 transition-colors ${pathname.startsWith("/configuracoes") ? "text-primary" : "text-text-muted group-hover:text-text-primary"}`}
-          />
-          Configurações
+          {pathname.startsWith("/configuracoes") && (
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full" />
+          )}
+          <Settings className={cn("w-4 h-4 transition-colors", pathname.startsWith("/configuracoes") ? "text-primary" : "text-text-muted group-hover:text-text-primary")} />
+          <span>Configurações</span>
         </Link>
       </div>
     </aside>

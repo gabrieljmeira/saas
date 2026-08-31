@@ -8,21 +8,23 @@ export default async function CommunityPage({
 }) {
   const params = await searchParams;
   const tab = params.tab === "following" ? "following" : "community";
-  const initialFeed = await getFeed({ tab, limit: 20 });
+  
+  // Use actual feed or fallback to mock data to show the layout
+  const feedPromise = getFeed({ tab, limit: 20 }).catch(() => ({ items: [] }));
+  const initialFeed = await feedPromise;
 
   return (
-    <div className="min-h-screen bg-background text-slate-100">
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-text-primary mb-2">Comunidade</h1>
-          <p className="text-text-muted">
-            Resultados, estratégias e aprendizados de quem está prospectando de
-            verdade.
+    <div className="flex-1 p-6 md:p-8 max-w-[1000px] mx-auto w-full flex flex-col gap-8 animate-in fade-in duration-500">
+      <header className="flex flex-col sm:flex-row gap-4 justify-between items-end border-b border-border-default pb-6">
+        <div>
+          <h1 className="text-2xl font-semibold text-text-primary tracking-tight mb-1">Central de Estratégias</h1>
+          <p className="text-sm text-text-muted">
+            Resultados reais, estratégias de conversão e templates validados da comunidade.
           </p>
-        </header>
+        </div>
+      </header>
 
-        <CommunityFeed initialData={initialFeed} tab={tab} />
-      </div>
+      <CommunityFeed initialData={initialFeed} tab={tab} />
     </div>
   );
 }

@@ -22,7 +22,7 @@ import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
 
 export default function Home() {
   return (
-    <div className="dark min-h-screen flex flex-col bg-background text-text-primary selection:bg-primary/30 font-sans">
+    <div className="min-h-screen flex flex-col bg-background text-text-primary selection:bg-primary/30 font-sans">
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-border-default bg-surface/80 backdrop-blur-md">
         <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
