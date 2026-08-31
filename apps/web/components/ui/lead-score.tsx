@@ -28,7 +28,8 @@ export function LeadScore({
   };
 
   const getIcon = () => {
-    if (isQualified) return <CheckCircle2 className="w-full h-full fill-current/20" />;
+    if (isQualified)
+      return <CheckCircle2 className="w-full h-full fill-current/20" />;
     if (isHigh) return <Flame className="w-full h-full fill-current/20" />;
     if (isMedium) return <Zap className="w-full h-full" />;
     return <ShieldAlert className="w-full h-full" />;

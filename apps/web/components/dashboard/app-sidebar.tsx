@@ -41,9 +41,7 @@ const navigationGroups = [
   },
   {
     label: "Social",
-    items: [
-      { name: "Comunidade", href: "/community", icon: Users },
-    ],
+    items: [{ name: "Comunidade", href: "/community", icon: Users }],
   },
 ];
 

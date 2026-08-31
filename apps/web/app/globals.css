@@ -109,7 +109,7 @@
   --destructive-foreground: oklch(0.98 0 0);
   --warning: oklch(0.75 0.18 70);
   --warning-foreground: oklch(0.2 0 0);
-  
+
   --ai: oklch(0.5 0.2 295);
   --ai-foreground: oklch(0.98 0 0);
 }
@@ -117,42 +117,42 @@
 .dark {
   /* DARK THEME (Navy/Slate/Graphite basis, deep depth) */
   /* Exact hex values from DESIGN.md */
-  --background: #0A0A0F;
+  --background: #0a0a0f;
   --surface: #111118;
-  --surface-elevated: #1A1A24;
+  --surface-elevated: #1a1a24;
   --surface-hover: #242432;
   --overlay: rgba(10, 10, 15, 0.8);
 
-  --text-primary: #F7F7FA;
-  --text-secondary: #B8B8C7;
-  --text-muted: #7E8192;
+  --text-primary: #f7f7fa;
+  --text-secondary: #b8b8c7;
+  --text-muted: #7e8192;
 
   --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-default: rgba(255, 255, 255, 0.10);
+  --border-default: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.16);
 
   /* Purple */
-  --primary: #7C3AED;
-  --primary-hover: #8B5CF6;
-  --primary-foreground: #FFFFFF;
+  --primary: #7c3aed;
+  --primary-hover: #8b5cf6;
+  --primary-foreground: #ffffff;
 
   /* Orange */
-  --accent: #F97316;
-  --accent-hover: #FB923C;
-  --accent-foreground: #FFFFFF;
+  --accent: #f97316;
+  --accent-hover: #fb923c;
+  --accent-foreground: #ffffff;
 
   /* Green */
-  --success: #22C55E;
+  --success: #22c55e;
   --success-muted: rgba(34, 197, 94, 0.15);
-  --success-foreground: #FFFFFF;
+  --success-foreground: #ffffff;
 
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-  --warning: #EAB308;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --warning: #eab308;
   --warning-foreground: #111118;
-  
-  --ai: #8B5CF6;
-  --ai-foreground: #FFFFFF;
+
+  --ai: #8b5cf6;
+  --ai-foreground: #ffffff;
 }
 
 @layer base {
@@ -165,7 +165,7 @@
   html {
     @apply font-sans;
   }
-  
+
   /* Focus system */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary transition-shadow;
@@ -178,9 +178,13 @@
     @apply transition-colors duration-200 hover:bg-surface-hover;
   }
   .card-shadow {
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    box-shadow:
+      0 1px 3px 0 rgb(0 0 0 / 0.1),
+      0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
   .dark .card-shadow {
-    box-shadow: 0 1px 0px 0px oklch(1 0 0 / 0.05) inset, 0 4px 6px -1px rgb(0 0 0 / 0.2);
+    box-shadow:
+      0 1px 0px 0px oklch(1 0 0 / 0.05) inset,
+      0 4px 6px -1px rgb(0 0 0 / 0.2);
   }
 }
