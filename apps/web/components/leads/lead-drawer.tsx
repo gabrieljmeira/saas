@@ -173,13 +173,17 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
                     size="sm" 
                     onClick={handleGenerateApproach}
                     disabled={isPending}
+                    className="h-8 text-xs bg-surface-elevated hover:bg-surface-hover hover:text-primary"
                     className="h-8 text-xs bg-surface-elevated hover:bg-surface-hover hover:text-primary transition-colors"
                   >
+                    {isPending ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : <Sparkles className="w-3 h-3 mr-2 text-primary" />}
+                    Gerar Mensagem com IA
                     {isPending ? <Loader2 className="w-3 h-3 mr-2 animate-spin text-text-muted" /> : <Sparkles className="w-3 h-3 mr-2 text-primary" />}
                     {approachMessage ? "Regerar" : "Gerar com IA"}
                   </Button>
                 </div>
 
+                {approachMessage ? (
                 {isPending ? (
                   <div className="bg-surface-elevated border border-border-default rounded-lg p-8 flex flex-col items-center justify-center text-center animate-in fade-in">
                     <FetchLeadsLogo state="processing" className="mb-4" />
@@ -199,6 +203,8 @@ export function LeadDrawer({ leadId, open, onOpenChange }: LeadDrawerProps) {
                     </Button>
                   </div>
                 ) : (
+                  <div className="text-sm text-text-muted p-4 bg-surface rounded-lg border border-border-dashed text-center">
+                    Gere uma mensagem personalizada para iniciar o contato.
                   <div className="text-sm text-text-muted p-6 bg-surface rounded-lg border border-border-dashed border-border-strong text-center">
                     Gere uma mensagem personalizada para iniciar o contato de forma assertiva.
                   </div>
