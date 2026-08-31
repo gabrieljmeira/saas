@@ -52,7 +52,7 @@ export function AppSidebar() {
     <aside className="hidden md:flex w-[240px] shrink-0 flex-col bg-surface border-r border-border-default h-screen sticky top-0">
       <div className="h-16 px-6 flex items-center gap-3 border-b border-border-subtle shrink-0">
         <FetchLeadsLogo
-          variant="default"
+          state="default"
           href="/"
           className="hover:opacity-100"
         />

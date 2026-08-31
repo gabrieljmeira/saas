@@ -90,23 +90,21 @@ export function LeadsClient({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9 h-9 bg-surface-elevated/50 hover:bg-surface-elevated focus:bg-surface-elevated transition-colors border-transparent hover:border-border-subtle focus:border-primary/30"
-            />
-          </form>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-text-muted uppercase tracking-wider mr-2">
-              Status
-            </span>
-            <div className="flex items-center bg-surface-elevated p-1 rounded-lg border border-border-subtle">
-              <button className="px-3 py-1 text-xs font-medium bg-surface rounded shadow-sm border border-border-default text-text-primary">
-                Todos
-              </button>
-              <button className="px-3 py-1 text-xs font-medium text-text-secondary hover:text-text-primary">
-                Novos
-              </button>
-              <button className="px-3 py-1 text-xs font-medium text-text-secondary hover:text-text-primary">
-                Contatados
-              </button>
-            </div>
+      {/* DATA GRID */}
+      <DashboardSurface className="flex-1 flex flex-col min-h-0 border-border-default overflow-hidden">
+        
+        {/* TABS */}
+        <div className="px-2 pt-2 border-b border-border-subtle bg-surface-elevated/30 shrink-0">
+          <div className="flex gap-4">
+            <button className="px-4 py-2 text-sm font-medium border-b-2 border-primary text-primary">
+              Todas Oportunidades
+            </button>
+            <button className="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors">
+              Recém Descobertos
+            </button>
+            <button className="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-text-muted hover:text-text-primary transition-colors">
+              Contatados
+            </button>
           </div>
         </div>
 
@@ -123,12 +121,12 @@ export function LeadsClient({
                 ? "Tente ajustar seus termos de busca ou filtros."
                 : "Você ainda não mapeou nenhuma empresa. Inicie uma nova busca."}
             </p>
-            {!currentQuery && <Button size="sm">Mapear Região</Button>}
+            {!currentQuery && <Button size="sm" onClick={startIntelligentSearch}>Mapear Região</Button>}
           </div>
         ) : (
           <div className="overflow-x-auto flex-1 bg-surface">
             <table className="w-full text-sm text-left">
-              <thead className="text-[11px] text-text-muted uppercase tracking-wider bg-surface-elevated/50 border-b border-border-subtle">
+              <thead className="text-[11px] text-text-muted uppercase tracking-wider bg-surface-elevated/50 border-b border-border-subtle sticky top-0 z-10">
                 <tr>
                   <th className="px-6 py-3 font-semibold">Lead</th>
                   <th className="px-6 py-3 font-semibold">Local</th>
@@ -148,7 +146,7 @@ export function LeadsClient({
                       onClick={() => setSelectedLeadId(lead.id)}
                       className={cn(
                         "cursor-pointer transition-colors group",
-                        isSelected ? "bg-primary/5" : "hover:bg-surface-hover",
+                        isSelected ? "bg-primary/5" : "hover:bg-surface-hover"
                       )}
                     >
                       <td className="px-6 py-4">
@@ -158,7 +156,7 @@ export function LeadsClient({
                               "w-8 h-8 rounded-md flex items-center justify-center font-bold text-xs shrink-0 transition-colors",
                               isSelected
                                 ? "bg-primary text-white"
-                                : "bg-surface-elevated border border-border-default text-text-secondary group-hover:border-primary/30 group-hover:text-primary",
+                                : "bg-surface-elevated border border-border-default text-text-secondary group-hover:border-primary/30 group-hover:text-primary"
                             )}
                           >
                             {lead.name.substring(0, 2).toUpperCase()}
@@ -167,9 +165,7 @@ export function LeadsClient({
                             <div
                               className={cn(
                                 "font-semibold text-sm transition-colors line-clamp-1",
-                                isSelected
-                                  ? "text-primary"
-                                  : "text-text-primary",
+                                isSelected ? "text-primary" : "text-text-primary"
                               )}
                             >
                               {lead.name}
@@ -211,7 +207,7 @@ export function LeadsClient({
                             </div>
                           )}
                           {lead.hasWhatsapp && (
-                            <div className="w-6 h-6 rounded flex items-center justify-center bg-success/10 text-success border border-success/20">
+                            <div className="w-6 h-6 rounded flex items-center justify-center text-success bg-success/10 border border-success/20">
                               <Smartphone className="w-3 h-3" />
                             </div>
                           )}
@@ -227,7 +223,7 @@ export function LeadsClient({
 
         {/* Pagination Footer */}
         {initialLeads.length > 0 && (
-          <div className="p-4 border-t border-border-default bg-surface-elevated/30 flex items-center justify-between text-xs font-medium text-text-muted">
+          <div className="p-4 border-t border-border-default bg-surface-elevated/30 flex items-center justify-between text-xs font-medium text-text-muted shrink-0">
             <div>Página {page}</div>
             <div className="flex gap-2">
               <Button
