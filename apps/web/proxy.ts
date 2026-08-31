@@ -36,15 +36,22 @@ export default async function proxy(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
+        // Read the custom preference cookie
+        const isSessionOnly = request.cookies.get("sb-remember-me")?.value === "false";
+
         cookiesToSet.forEach(({ name, value }) =>
           request.cookies.set(name, value),
         );
         supabaseResponse = NextResponse.next({
           request,
         });
-        cookiesToSet.forEach(({ name, value, options }) =>
-          supabaseResponse.cookies.set(name, value, options),
-        );
+        cookiesToSet.forEach(({ name, value, options }) => {
+          if (isSessionOnly && name.includes('-auth-token')) {
+            delete options.maxAge;
+            delete options.expires;
+          }
+          supabaseResponse.cookies.set(name, value, options);
+        });
       },
     },
   });

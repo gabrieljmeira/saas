@@ -1,15 +1,17 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { forgotPasswordAction } from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircle, Loader2, Send } from "lucide-react";
+import { AlertCircle, Loader2, MailCheck, ArrowLeft } from "lucide-react";
 
 export function ForgotPasswordForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [state, formAction, pending] = useActionState<any, FormData>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (prevState: any, formData: FormData) => {
       return await forgotPasswordAction(formData);
     },
@@ -18,42 +20,58 @@ export function ForgotPasswordForm() {
 
   if (state?.success) {
     return (
-      <div className="w-full text-center">
-        <div className="mx-auto w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mb-6">
-          <Send className="w-6 h-6" />
+      <div className="w-full text-center flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
+        <div className="w-16 h-16 bg-success-muted text-success rounded-full flex items-center justify-center mb-6 shadow-sm border border-success/20">
+          <MailCheck className="w-8 h-8" />
         </div>
-        <h2 className="text-2xl font-semibold text-white tracking-tight mb-3">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight mb-3">
           Verifique seu email
         </h2>
-        <p className="text-slate-400 mb-8">
-          Se houver uma conta associada a esse email, você receberá instruções
-          para redefinir sua senha.
+        <p className="text-sm sm:text-base text-text-muted mb-8 max-w-sm mx-auto leading-relaxed">
+          Se o email informado estiver cadastrado, você receberá um link para
+          redefinir sua senha em instantes.
         </p>
-        <Link
-          href="/login"
-          className="flex w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg justify-center transition-all"
-        >
-          Voltar para o Login
+        <Link href="/login" className="w-full">
+          <Button variant="outline" className="w-full h-11 text-base font-medium">
+            Voltar para o login
+          </Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-white tracking-tight">
-          Recuperar senha
+        <Link
+          href="/login"
+          className="inline-flex items-center text-sm font-medium text-text-muted hover:text-text-primary transition-colors mb-6"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Voltar para login
+        </Link>
+        <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight">
+          Esqueceu sua senha?
         </h2>
-        <p className="text-sm text-slate-400 mt-2">
-          Digite seu email e enviaremos um link para você redefinir sua senha.
+        <p className="text-sm sm:text-base text-text-muted mt-2">
+          Não se preocupe. Digite seu email para enviarmos um link de redefinição.
         </p>
       </div>
 
-      <form action={formAction} className="space-y-6">
+      {state?.error && (
+        <div className="mb-6 p-4 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3 shadow-sm" role="alert">
+          <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+          <p className="text-sm text-destructive font-medium leading-relaxed">{state.error}</p>
+        </div>
+      )}
+
+      <form action={formAction} className="space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="email" className={state?.error ? "text-red-400" : ""}>
-            Email
+          <Label
+            htmlFor="email"
+            className="text-sm font-medium text-text-secondary"
+          >
+            Email cadastrado
           </Label>
           <Input
             id="email"
@@ -62,46 +80,29 @@ export function ForgotPasswordForm() {
             placeholder="seu@email.com"
             required
             autoComplete="email"
-            className={`bg-slate-900/50 border-slate-800 focus-visible:ring-purple-500/50 ${
+            className={`h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary ${
               state?.error
-                ? "border-red-500/50 focus-visible:ring-red-500/20"
+                ? "border-destructive focus-visible:ring-destructive"
                 : ""
             }`}
           />
         </div>
 
-        {state?.error && (
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400 font-medium">{state.error}</p>
-          </div>
-        )}
-
         <Button
           type="submit"
           disabled={pending}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 h-auto transition-colors"
+          className="w-full h-11 text-base font-medium shadow-sm transition-all mt-4"
         >
           {pending ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Enviando…
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Enviando...
             </span>
           ) : (
-            "Enviar instruções"
+            "Enviar link de redefinição"
           )}
         </Button>
       </form>
-
-      <div className="mt-8 text-center text-sm text-slate-400">
-        Lembrou da senha?{" "}
-        <Link
-          href="/login"
-          className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
-        >
-          Entrar
-        </Link>
-      </div>
     </div>
   );
 }

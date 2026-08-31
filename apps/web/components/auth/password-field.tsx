@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface PasswordFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   id: string;
   error?: string;
   showStrength?: boolean;
@@ -42,17 +42,19 @@ export function PasswordField({
   };
 
   const getStrengthColor = () => {
-    if (strength === 0) return "bg-slate-800";
-    if (strength <= 1) return "bg-red-500";
-    if (strength <= 2) return "bg-orange-500";
-    return "bg-emerald-500";
+    if (strength === 0) return "bg-surface-elevated";
+    if (strength <= 1) return "bg-destructive";
+    if (strength <= 2) return "bg-warning";
+    return "bg-success";
   };
 
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className={error ? "text-red-400" : ""}>
-        {label}
-      </Label>
+    <div className="space-y-2 w-full">
+      {label && (
+        <Label htmlFor={id} className={error ? "text-destructive" : "text-text-secondary"}>
+          {label}
+        </Label>
+      )}
       <div className="relative">
         <Input
           {...props}
@@ -63,14 +65,14 @@ export function PasswordField({
             setValue(e.target.value);
             props.onChange?.(e);
           }}
-          className={`pr-10 ${error ? "border-red-500/50 focus-visible:ring-red-500/20" : ""}`}
+          className={`pr-10 ${error ? "border-destructive focus-visible:ring-destructive" : ""} ${props.className || ""}`}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-error` : undefined}
         />
         <button
           type="button"
           onClick={() => setShow(!show)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
           aria-label={show ? "Ocultar senha" : "Mostrar senha"}
         >
           {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -79,24 +81,24 @@ export function PasswordField({
 
       {showStrength && value.length > 0 && (
         <div className="flex items-center gap-2 mt-2">
-          <div className="flex-1 flex gap-1 h-1">
+          <div className="flex-1 flex gap-1 h-1.5">
             {[1, 2, 3].map((level) => (
               <div
                 key={level}
-                className={`flex-1 rounded-full ${
-                  strength >= level ? getStrengthColor() : "bg-slate-800"
+                className={`flex-1 rounded-full transition-colors duration-300 ${
+                  strength >= level ? getStrengthColor() : "bg-surface-hover"
                 }`}
               />
             ))}
           </div>
-          <span className="text-xs text-slate-500 w-12 text-right">
+          <span className="text-xs text-text-muted font-medium w-16 text-right">
             {getStrengthLabel()}
           </span>
         </div>
       )}
 
       {error && (
-        <p id={`${id}-error`} className="text-xs text-red-400">
+        <p id={`${id}-error`} className="text-xs text-destructive font-medium mt-1">
           {error}
         </p>
       )}

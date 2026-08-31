@@ -10,7 +10,9 @@ import { PasswordField } from "@/components/auth/password-field";
 import { AlertCircle, Loader2, MailCheck } from "lucide-react";
 
 export function SignupForm() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [state, formAction, pending] = useActionState<any, FormData>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (prevState: any, formData: FormData) => {
       return await signupAction(formData);
     },
@@ -19,43 +21,60 @@ export function SignupForm() {
 
   if (state?.success && state?.requireEmailConfirmation) {
     return (
-      <div className="w-full text-center">
-        <div className="mx-auto w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-full flex items-center justify-center mb-6">
-          <MailCheck className="w-6 h-6" />
+      <div className="w-full text-center flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
+        <div className="w-16 h-16 bg-success-muted text-success rounded-full flex items-center justify-center mb-6 shadow-sm border border-success/20">
+          <MailCheck className="w-8 h-8" />
         </div>
-        <h2 className="text-2xl font-semibold text-white tracking-tight mb-3">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight mb-3">
           Confira seu email
         </h2>
-        <p className="text-slate-400 mb-8">
+        <p className="text-sm sm:text-base text-text-muted mb-8 max-w-sm mx-auto leading-relaxed">
           Enviamos um link de confirmação para o seu endereço. Confirme o email
-          para continuar e acessar a plataforma.
+          para acessar sua conta.
         </p>
-        <Link
-          href="/login"
-          className="flex w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg justify-center transition-all"
-        >
-          Voltar para o Login
+        <Link href="/login" className="w-full">
+          <Button variant="outline" className="w-full h-11 text-base font-medium">
+            Voltar para o login
+          </Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-white tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight">
           Crie sua conta
         </h2>
-        <p className="text-sm text-slate-400 mt-2">
-          Comece a encontrar e organizar suas próximas oportunidades.
+        <p className="text-sm sm:text-base text-text-muted mt-2">
+          Comece a prospectar e vender com o FetchLeads hoje.
         </p>
       </div>
+
+      {state?.error && (
+        <div className="mb-6 p-4 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3 shadow-sm" role="alert">
+          <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="text-sm text-destructive font-medium leading-relaxed">{state.error}</p>
+            {state?.details?.fieldErrors && (
+              <ul className="list-disc pl-4 text-xs text-destructive/80 space-y-1">
+                {Object.entries(state.details.fieldErrors).map(
+                  ([field, errors]) => (
+                    <li key={field}>{(errors as string[])[0]}</li>
+                  ),
+                )}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
 
       <form action={formAction} className="space-y-5">
         <div className="space-y-2">
           <Label
             htmlFor="name"
-            className={state?.details?.fieldErrors?.name ? "text-red-400" : ""}
+            className="text-sm font-medium text-text-secondary"
           >
             Nome completo
           </Label>
@@ -63,86 +82,89 @@ export function SignupForm() {
             id="name"
             name="name"
             type="text"
-            placeholder="Seu nome"
+            placeholder="João Silva"
             required
             autoComplete="name"
-            className={`bg-slate-900/50 border-slate-800 focus-visible:ring-purple-500/50 ${
+            className={`h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary ${
               state?.details?.fieldErrors?.name
-                ? "border-red-500/50 focus-visible:ring-red-500/20"
+                ? "border-destructive focus-visible:ring-destructive"
                 : ""
             }`}
           />
-          {state?.details?.fieldErrors?.name && (
-            <p className="text-xs text-red-400">
-              {state.details.fieldErrors.name[0]}
-            </p>
-          )}
         </div>
 
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className={state?.details?.fieldErrors?.email ? "text-red-400" : ""}
+            className="text-sm font-medium text-text-secondary"
           >
-            Email
+            Email comercial
           </Label>
           <Input
             id="email"
             name="email"
             type="email"
-            placeholder="seu@email.com"
+            placeholder="joao@empresa.com"
             required
             autoComplete="email"
-            className={`bg-slate-900/50 border-slate-800 focus-visible:ring-purple-500/50 ${
+            className={`h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary ${
               state?.details?.fieldErrors?.email
-                ? "border-red-500/50 focus-visible:ring-red-500/20"
+                ? "border-destructive focus-visible:ring-destructive"
                 : ""
             }`}
           />
-          {state?.details?.fieldErrors?.email && (
-            <p className="text-xs text-red-400">
-              {state.details.fieldErrors.email[0]}
-            </p>
-          )}
         </div>
 
-        <PasswordField
-          id="password"
-          name="password"
-          label="Senha"
-          required
-          showStrength
-          autoComplete="new-password"
-          className="bg-slate-900/50 border-slate-800 focus-visible:ring-purple-500/50"
-          error={state?.details?.fieldErrors?.password?.[0]}
-        />
+        <div className="space-y-2">
+          <Label
+            htmlFor="password"
+            className="text-sm font-medium text-text-secondary"
+          >
+            Senha
+          </Label>
+          <PasswordField
+            id="password"
+            name="password"
+            required
+            autoComplete="new-password"
+            className={`h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary ${
+              state?.details?.fieldErrors?.password
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
+            }`}
+          />
+          <p className="text-xs text-text-muted">Mínimo de 6 caracteres.</p>
+        </div>
 
-        <PasswordField
-          id="confirmPassword"
-          name="confirmPassword"
-          label="Confirmar senha"
-          required
-          autoComplete="new-password"
-          className="bg-slate-900/50 border-slate-800 focus-visible:ring-purple-500/50"
-          error={state?.details?.fieldErrors?.confirmPassword?.[0]}
-        />
-
-        {state?.error && (
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-            <p className="text-sm text-red-400 font-medium">{state.error}</p>
-          </div>
-        )}
+        <div className="space-y-2">
+          <Label
+            htmlFor="confirmPassword"
+            className="text-sm font-medium text-text-secondary"
+          >
+            Confirmar senha
+          </Label>
+          <PasswordField
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            autoComplete="new-password"
+            className={`h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary ${
+              state?.details?.fieldErrors?.confirmPassword
+                ? "border-destructive focus-visible:ring-destructive"
+                : ""
+            }`}
+          />
+        </div>
 
         <Button
           type="submit"
           disabled={pending}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2.5 h-auto transition-colors mt-6"
+          className="w-full h-11 text-base font-medium shadow-sm transition-all mt-6"
         >
           {pending ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Criando conta…
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Criando conta...
             </span>
           ) : (
             "Criar conta"
@@ -150,32 +172,22 @@ export function SignupForm() {
         </Button>
       </form>
 
-      <div className="mt-6 text-center text-xs text-slate-500">
-        Ao criar sua conta, você concorda com os{" "}
-        <Link
-          href="/termos"
-          className="text-slate-400 hover:text-white underline underline-offset-2"
-        >
-          Termos de Uso
-        </Link>{" "}
-        e reconhece a{" "}
-        <Link
-          href="/privacidade"
-          className="text-slate-400 hover:text-white underline underline-offset-2"
-        >
-          Política de Privacidade
-        </Link>
-        .
-      </div>
-
-      <div className="mt-8 text-center text-sm text-slate-400">
-        Já possui uma conta?{" "}
-        <Link
-          href="/login"
-          className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
-        >
-          Entrar
-        </Link>
+      <div className="mt-8 pt-6 border-t border-border-subtle flex flex-col items-center gap-4">
+        <div className="text-sm text-text-muted">
+          Já tem uma conta?{" "}
+          <Link
+            href="/login"
+            className="font-medium text-text-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline underline-offset-4"
+          >
+            Fazer login
+          </Link>
+        </div>
+        
+        <div className="flex items-center gap-4 text-xs text-text-muted/60">
+          <Link href="/termos" className="hover:text-text-muted transition-colors">Termos de Uso</Link>
+          <span>&bull;</span>
+          <Link href="/privacidade" className="hover:text-text-muted transition-colors">Privacidade</Link>
+        </div>
       </div>
     </div>
   );

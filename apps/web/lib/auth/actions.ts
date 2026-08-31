@@ -14,16 +14,29 @@ import {
 } from "./schemas";
 
 export async function loginAction(formData: FormData) {
-  const supabase = await createClient();
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
-  const nextUrl = (formData.get("next") as string) || "/dashboard";
+  const remember = formData.get("remember") === "on";
+  let nextUrl = (formData.get("next") as string) || "/dashboard";
+
+  // Prevent open redirect
+  if (!nextUrl.startsWith("/") || nextUrl.startsWith("//")) {
+    nextUrl = "/dashboard";
+  }
 
   const parsed = LoginSchema.safeParse({ email, password });
   if (!parsed.success) {
     return { error: "Dados inválidos." };
   }
 
+  // Import locally to avoid modifying top level if not needed, or just ensure it's available
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+  
+  // Set the preference BEFORE calling createClient/signInWithPassword
+  cookieStore.set("sb-remember-me", remember ? "true" : "false", { path: "/", secure: process.env.NODE_ENV === "production" });
+
+  const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -40,7 +53,7 @@ export async function loginAction(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect(nextUrl.startsWith("/") ? nextUrl : "/dashboard");
+  redirect(nextUrl);
 }
 
 export async function signupAction(formData: FormData) {
@@ -114,6 +127,11 @@ export async function signupAction(formData: FormData) {
 export async function logoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
+  
+  const { cookies } = await import("next/headers");
+  const cookieStore = await cookies();
+  cookieStore.delete("sb-remember-me");
+  
   revalidatePath("/", "layout");
   redirect("/login");
 }

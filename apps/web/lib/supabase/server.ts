@@ -19,10 +19,17 @@ export async function createClient() {
         return cookieStore.getAll();
       },
       setAll(cookiesToSet) {
+        // Read the custom preference cookie
+        const isSessionOnly = cookieStore.get("sb-remember-me")?.value === "false";
+
         try {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options),
-          );
+          cookiesToSet.forEach(({ name, value, options }) => {
+            if (isSessionOnly && name.includes('-auth-token')) {
+              delete options.maxAge;
+              delete options.expires;
+            }
+            cookieStore.set(name, value, options);
+          });
         } catch {
           // The `setAll` method was called from a Server Component.
           // This can be ignored if you have middleware/proxy refreshing user sessions.

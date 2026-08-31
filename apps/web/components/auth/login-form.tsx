@@ -6,6 +6,7 @@ import { loginAction } from "@/lib/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { PasswordField } from "@/components/auth/password-field";
 import { AlertCircle, Loader2, CheckCircle2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -15,7 +16,10 @@ export function LoginForm() {
   const nextParam = searchParams.get("next") || "";
   const resetSuccess = searchParams.get("reset") === "success";
 
+  // We explicitly want unknown/any due to FormData action type bridging
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [state, formAction, pending] = useActionState<any, FormData>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (prevState: any, formData: FormData) => {
       return await loginAction(formData);
     },
@@ -23,36 +27,43 @@ export function LoginForm() {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-text-primary tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-text-primary tracking-tight">
           Bem-vindo de volta
         </h2>
-        <p className="text-sm text-text-muted mt-2">
-          Entre na sua conta para continuar prospectando.
+        <p className="text-sm sm:text-base text-text-muted mt-2">
+          Entre na sua conta para continuar sua prospecção.
         </p>
       </div>
 
       {resetSuccess && (
-        <div className="mb-6 p-4 rounded-lg bg-success-muted border border-success/20 flex items-start gap-3">
+        <div className="mb-6 p-4 rounded-lg bg-success-muted border border-success/20 flex items-start gap-3 shadow-sm">
           <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
-          <p className="text-sm text-success font-medium">
+          <p className="text-sm text-success font-medium leading-relaxed">
             Senha redefinida com sucesso. Faça login com a sua nova senha.
           </p>
         </div>
       )}
 
-      <form action={formAction} className="space-y-6">
+      {state?.error && (
+        <div className="mb-6 p-4 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3 shadow-sm" role="alert">
+          <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
+          <p className="text-sm text-destructive font-medium leading-relaxed">{state.error}</p>
+        </div>
+      )}
+
+      <form action={formAction} className="space-y-5">
         <input type="hidden" name="next" value={nextParam} />
 
         <div className="space-y-2">
           <Label
             htmlFor="email"
-            className={
+            className={`text-sm font-medium ${
               state?.error && !state?.error.includes("senha")
                 ? "text-destructive"
-                : ""
-            }
+                : "text-text-secondary"
+            }`}
           >
             Email
           </Label>
@@ -63,7 +74,7 @@ export function LoginForm() {
             placeholder="seu@email.com"
             required
             autoComplete="email"
-            className={`bg-surface border-border-default focus-visible:ring-primary ${
+            className={`h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary ${
               state?.error && !state?.error.includes("senha")
                 ? "border-destructive focus-visible:ring-destructive"
                 : ""
@@ -71,41 +82,46 @@ export function LoginForm() {
           />
         </div>
 
-        <div>
+        <div className="space-y-2">
+          <Label
+            htmlFor="password"
+            className="text-sm font-medium text-text-secondary"
+          >
+            Senha
+          </Label>
           <PasswordField
             id="password"
             name="password"
-            label="Senha"
             required
             autoComplete="current-password"
-            className="bg-surface border-border-default focus-visible:ring-primary"
+            className="h-11 bg-surface border-border-default focus-visible:ring-primary text-text-primary"
           />
-          <div className="flex justify-end mt-2">
-            <Link
-              href="/esqueci-senha"
-              className="text-xs font-medium text-primary hover:text-primary-hover transition-colors"
-            >
-              Esqueci minha senha
-            </Link>
-          </div>
         </div>
 
-        {state?.error && (
-          <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
-            <p className="text-sm text-destructive font-medium">{state.error}</p>
+        <div className="flex items-center justify-between pt-1 pb-2">
+          <div className="flex items-center gap-2">
+            <Checkbox id="remember" name="remember" defaultChecked value="on" className="data-[state=checked]:bg-primary data-[state=checked]:border-primary" />
+            <Label htmlFor="remember" className="text-sm font-medium text-text-muted cursor-pointer hover:text-text-primary transition-colors">
+              Manter conectado
+            </Label>
           </div>
-        )}
+          <Link
+            href="/esqueci-senha"
+            className="text-sm font-medium text-primary hover:text-primary-hover transition-colors focus-visible:outline-none focus-visible:underline underline-offset-4"
+          >
+            Esqueci a senha
+          </Link>
+        </div>
 
         <Button
           type="submit"
           disabled={pending}
-          className="w-full"
+          className="w-full h-11 text-base font-medium shadow-sm transition-all"
         >
           {pending ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Entrando…
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Entrando...
             </span>
           ) : (
             "Entrar"
@@ -113,14 +129,22 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <div className="mt-8 text-center text-sm text-text-secondary">
-        Ainda não tem uma conta?{" "}
-        <Link
-          href="/signup"
-          className="font-medium text-primary hover:text-primary-hover transition-colors"
-        >
-          Criar conta
-        </Link>
+      <div className="mt-8 pt-6 border-t border-border-subtle flex flex-col items-center gap-4">
+        <div className="text-sm text-text-muted">
+          Ainda não tem uma conta?{" "}
+          <Link
+            href="/signup"
+            className="font-medium text-text-primary hover:text-primary transition-colors focus-visible:outline-none focus-visible:underline underline-offset-4"
+          >
+            Criar conta
+          </Link>
+        </div>
+        
+        <div className="flex items-center gap-4 text-xs text-text-muted/60">
+          <Link href="/termos" className="hover:text-text-muted transition-colors">Termos de Uso</Link>
+          <span>&bull;</span>
+          <Link href="/privacidade" className="hover:text-text-muted transition-colors">Privacidade</Link>
+        </div>
       </div>
     </div>
   );
