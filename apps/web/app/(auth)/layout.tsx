@@ -21,11 +21,13 @@ export default function AuthLayout({
 
         <div className="relative z-10 mt-auto mb-auto max-w-xl pr-8">
           <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tight text-white mb-6 leading-[1.15]">
-            Encontre oportunidades.<br />
+            Encontre oportunidades.
+            <br />
             <span className="text-text-secondary">Comece conversas.</span>
           </h1>
           <p className="text-base lg:text-lg text-text-muted mb-12 max-w-md leading-relaxed">
-            Da descoberta ao fechamento, organize sua prospecção em um único fluxo de trabalho inteligente.
+            Da descoberta ao fechamento, organize sua prospecção em um único
+            fluxo de trabalho inteligente.
           </p>
 
           <div className="space-y-6">
@@ -34,7 +36,9 @@ export default function AuthLayout({
                 <Target className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-medium text-text-primary text-sm lg:text-base">Prospecção inteligente</h3>
+                <h3 className="font-medium text-text-primary text-sm lg:text-base">
+                  Prospecção inteligente
+                </h3>
               </div>
             </div>
 
@@ -43,7 +47,9 @@ export default function AuthLayout({
                 <Users className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-medium text-text-primary text-sm lg:text-base">CRM integrado</h3>
+                <h3 className="font-medium text-text-primary text-sm lg:text-base">
+                  CRM integrado
+                </h3>
               </div>
             </div>
 
@@ -52,7 +58,9 @@ export default function AuthLayout({
                 <Zap className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-medium text-text-primary text-sm lg:text-base">WhatsApp em 1 clique</h3>
+                <h3 className="font-medium text-text-primary text-sm lg:text-base">
+                  WhatsApp em 1 clique
+                </h3>
               </div>
             </div>
           </div>
@@ -73,7 +81,7 @@ export default function AuthLayout({
         <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12 w-full max-w-[480px] mx-auto z-10">
           {children}
         </div>
-        
+
         {/* Mobile footer for legal */}
         <div className="md:hidden p-6 text-center text-xs text-text-muted mt-auto">
           &copy; {new Date().getFullYear()} FetchLeads

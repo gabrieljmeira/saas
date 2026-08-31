@@ -3,19 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { 
-  LayoutDashboard, 
-  Search, 
-  KanbanSquare, 
-  MessageSquare, 
-  Clock, 
-  Target, 
-  DollarSign, 
-  Users, 
+import {
+  LayoutDashboard,
+  Search,
+  KanbanSquare,
+  MessageSquare,
+  Clock,
+  Target,
+  DollarSign,
+  Users,
   Settings,
   Menu,
   X,
-  Bell
+  Bell,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
@@ -24,9 +24,7 @@ import { Input } from "@/components/ui/input";
 const navigationGroups = [
   {
     label: null,
-    items: [
-      { name: "Visão geral", href: "/dashboard", icon: LayoutDashboard },
-    ],
+    items: [{ name: "Visão geral", href: "/dashboard", icon: LayoutDashboard }],
   },
   {
     label: "Prospecção",
@@ -46,9 +44,7 @@ const navigationGroups = [
   },
   {
     label: "Social",
-    items: [
-      { name: "Comunidade", href: "/community", icon: Users },
-    ],
+    items: [{ name: "Comunidade", href: "/community", icon: Users }],
   },
 ];
 
@@ -59,21 +55,29 @@ export function AppTopbar() {
   return (
     <>
       <header className="flex items-center justify-between px-4 md:px-6 h-16 bg-surface border-b border-border-subtle sticky top-0 z-40 shrink-0">
-        
         {/* Mobile Left: Logo & Hamburger */}
         <div className="md:hidden flex items-center gap-3">
-          <Button variant="ghost" size="icon-sm" onClick={() => setIsOpen(true)} className="text-text-muted hover:text-text-primary">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={() => setIsOpen(true)}
+            className="text-text-muted hover:text-text-primary"
+          >
             <Menu className="w-5 h-5" />
           </Button>
-          <FetchLeadsLogo variant="icon" href="/" className="w-7 h-7 hover:opacity-90" />
+          <FetchLeadsLogo
+            variant="icon"
+            href="/"
+            className="w-7 h-7 hover:opacity-90"
+          />
         </div>
 
         {/* Desktop Left: Global Search */}
         <div className="hidden md:flex items-center flex-1 max-w-md">
           <div className="relative w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-            <Input 
-              placeholder="Buscar leads, contatos, tarefas..." 
+            <Input
+              placeholder="Buscar leads, contatos, tarefas..."
               className="w-full pl-9 h-9 bg-surface-elevated border-border-subtle focus-visible:ring-primary rounded-md text-sm"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
@@ -86,17 +90,21 @@ export function AppTopbar() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3 md:gap-4 ml-auto">
-          <Button variant="ghost" size="icon-sm" className="text-text-muted hover:text-text-primary relative">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="text-text-muted hover:text-text-primary relative"
+          >
             <Bell className="w-4 h-4" />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-accent rounded-full border border-surface"></span>
           </Button>
-          
+
           <div className="h-4 w-px bg-border-subtle hidden md:block"></div>
-          
+
           <Link href="/configuracoes" className="flex items-center gap-2">
-             <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-medium text-sm">
-               US
-             </div>
+            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-medium text-sm">
+              US
+            </div>
           </Link>
         </div>
       </header>
@@ -104,13 +112,21 @@ export function AppTopbar() {
       {/* Mobile Drawer */}
       {isOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsOpen(false)}
+          />
           <aside className="w-[280px] bg-surface h-full flex flex-col relative z-50 animate-in slide-in-from-left duration-200 shadow-xl">
             <div className="h-16 px-6 flex items-center justify-between border-b border-border-subtle shrink-0">
               <div className="flex items-center gap-3">
                 <FetchLeadsLogo variant="default" href="/" />
               </div>
-              <Button variant="ghost" size="icon-sm" onClick={() => setIsOpen(false)} className="text-text-muted hover:text-text-primary">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setIsOpen(false)}
+                className="text-text-muted hover:text-text-primary"
+              >
                 <X className="w-5 h-5" />
               </Button>
             </div>
@@ -124,19 +140,23 @@ export function AppTopbar() {
                     </h4>
                   )}
                   {group.items.map((item) => {
-                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    const isActive =
+                      pathname === item.href ||
+                      pathname.startsWith(`${item.href}/`);
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
                         onClick={() => setIsOpen(false)}
                         className={`group flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-sm ${
-                          isActive 
-                            ? "text-primary font-medium bg-surface-hover" 
+                          isActive
+                            ? "text-primary font-medium bg-surface-hover"
                             : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
                         }`}
                       >
-                        <item.icon className={`w-4 h-4 ${isActive ? "text-primary" : "text-text-muted group-hover:text-text-primary"}`} />
+                        <item.icon
+                          className={`w-4 h-4 ${isActive ? "text-primary" : "text-text-muted group-hover:text-text-primary"}`}
+                        />
                         {item.name}
                       </Link>
                     );
@@ -151,11 +171,13 @@ export function AppTopbar() {
                 onClick={() => setIsOpen(false)}
                 className={`group flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors text-sm ${
                   pathname.startsWith("/configuracoes")
-                    ? "text-primary font-medium bg-surface-hover" 
+                    ? "text-primary font-medium bg-surface-hover"
                     : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
                 }`}
               >
-                <Settings className={`w-4 h-4 ${pathname.startsWith("/configuracoes") ? "text-primary" : "text-text-muted group-hover:text-text-primary"}`} />
+                <Settings
+                  className={`w-4 h-4 ${pathname.startsWith("/configuracoes") ? "text-primary" : "text-text-muted group-hover:text-text-primary"}`}
+                />
                 Configurações
               </Link>
             </div>

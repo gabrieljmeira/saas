@@ -8,7 +8,11 @@ interface FetchLeadsLogoProps {
   href?: string;
 }
 
-export function FetchLeadsLogo({ className, variant = "default", href = "/" }: FetchLeadsLogoProps) {
+export function FetchLeadsLogo({
+  className,
+  variant = "default",
+  href = "/",
+}: FetchLeadsLogoProps) {
   const content = (
     <>
       {(variant === "default" || variant === "icon") && (
@@ -35,11 +39,11 @@ export function FetchLeadsLogo({ className, variant = "default", href = "/" }: F
   }
 
   return (
-    <Link 
-      href={href} 
+    <Link
+      href={href}
       className={cn(
         "flex items-center gap-2.5 hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md",
-        className
+        className,
       )}
     >
       {content}

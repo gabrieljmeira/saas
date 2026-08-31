@@ -1,11 +1,13 @@
-const fs = require('fs');
-const path = 'apps/web/app/page.tsx';
-const content = fs.readFileSync(path, 'utf8');
+const fs = require("fs");
+const path = "apps/web/app/page.tsx";
+const content = fs.readFileSync(path, "utf8");
 
-const comoFuncionaIdx = content.indexOf('        {/* Como Funciona Section */}');
+const comoFuncionaIdx = content.indexOf(
+  "        {/* Como Funciona Section */}",
+);
 
 if (comoFuncionaIdx === -1) {
-  console.log('Could not find Como Funciona section');
+  console.log("Could not find Como Funciona section");
   process.exit(1);
 }
 
@@ -211,4 +213,4 @@ export default function Home() {
 
 const bottomContent = content.substring(comoFuncionaIdx);
 fs.writeFileSync(path, topContent + bottomContent);
-console.log('Successfully updated page.tsx');
+console.log("Successfully updated page.tsx");
