@@ -4,3 +4,4 @@ export * from "./leads";
 export * from "./pipeline";
 export * from "./crm";
 export * from "./goals";
+export * from "./billing";

@@ -29,6 +29,13 @@
       "when": 1788067069552,
       "tag": "0003_oval_spitfire",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788141367756,
+      "tag": "0004_nifty_hex",
+      "breakpoints": true
     }
   ]
 }

@@ -190,3 +190,28 @@ export async function generateApproachAction(leadId: string) {
   
   return res;
 }
+import { profiles } from '@saas/db/schema/users';
+import { consumeSearch, completeSearch, refundSearch } from '@saas/core/billing';
+import { PlanType } from '@saas/core/billing';
+
+export async function startSearchAction() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Unauthorized');
+
+  const profile = await db.query.profiles.findFirst({ where: eq(profiles.id, user.id) });
+  if (!profile) throw new Error('Profile not found');
+
+  const result = await consumeSearch(user.id, profile.plan as PlanType);
+  if (!result.allowed) return { success: false, error: 'QUOTA_EXCEEDED' };
+
+  return { success: true, usageId: result.usageId };
+}
+
+export async function completeSearchAction(usageId: string, resultsReturned: number) {
+  await completeSearch(usageId, resultsReturned);
+}
+
+export async function failSearchAction(usageId: string, reason: string) {
+  await refundSearch(usageId, reason);
+}

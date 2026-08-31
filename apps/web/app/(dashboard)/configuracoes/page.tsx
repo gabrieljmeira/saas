@@ -147,6 +147,29 @@ export default async function ConfiguracoesPage() {
             </div>
           </DashboardSurface>
         </section>
+
+        {/* Billing Section */}
+        <section>
+          <div className="flex items-center gap-2 mb-3">
+            <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+              Assinatura e Créditos
+            </h3>
+          </div>
+          <DashboardSurface className="p-6">
+             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">Gerenciar Plano e Cobrança</span>
+                <span className="text-xs text-text-muted mt-1">
+                  Visualize seu uso, compre créditos extras ou altere o seu plano.
+                </span>
+              </div>
+              <a href="/configuracoes/billing" className="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-primary text-primary-foreground h-10 px-4 py-2 hover:bg-primary/90">
+                Acessar Cobrança
+              </a>
+             </div>
+          </DashboardSurface>
+        </section>
+
       </div>
     </div>
   );
