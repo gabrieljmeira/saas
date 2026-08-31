@@ -590,8 +590,10 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 mb-12">
             <div className="md:col-span-1">
-              <FetchLeadsLogo variant="text-only" className="text-slate-200" />
-              <FetchLeadsLogo state="default" className="brightness-200 grayscale" />
+              <FetchLeadsLogo
+                state="default"
+                className="brightness-200 grayscale"
+              />
               <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
                 Prospecção inteligente para quem vende serviços para negócios
                 locais.
