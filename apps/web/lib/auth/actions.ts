@@ -32,9 +32,12 @@ export async function loginAction(formData: FormData) {
   // Import locally to avoid modifying top level if not needed, or just ensure it's available
   const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
-  
+
   // Set the preference BEFORE calling createClient/signInWithPassword
-  cookieStore.set("sb-remember-me", remember ? "true" : "false", { path: "/", secure: process.env.NODE_ENV === "production" });
+  cookieStore.set("sb-remember-me", remember ? "true" : "false", {
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+  });
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
@@ -127,11 +130,11 @@ export async function signupAction(formData: FormData) {
 export async function logoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  
+
   const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
   cookieStore.delete("sb-remember-me");
-  
+
   revalidatePath("/", "layout");
   redirect("/login");
 }

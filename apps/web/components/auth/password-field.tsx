@@ -51,7 +51,10 @@ export function PasswordField({
   return (
     <div className="space-y-2 w-full">
       {label && (
-        <Label htmlFor={id} className={error ? "text-destructive" : "text-text-secondary"}>
+        <Label
+          htmlFor={id}
+          className={error ? "text-destructive" : "text-text-secondary"}
+        >
           {label}
         </Label>
       )}
@@ -98,7 +101,10 @@ export function PasswordField({
       )}
 
       {error && (
-        <p id={`${id}-error`} className="text-xs text-destructive font-medium mt-1">
+        <p
+          id={`${id}-error`}
+          className="text-xs text-destructive font-medium mt-1"
+        >
           {error}
         </p>
       )}

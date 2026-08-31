@@ -20,11 +20,12 @@ export async function createClient() {
       },
       setAll(cookiesToSet) {
         // Read the custom preference cookie
-        const isSessionOnly = cookieStore.get("sb-remember-me")?.value === "false";
+        const isSessionOnly =
+          cookieStore.get("sb-remember-me")?.value === "false";
 
         try {
           cookiesToSet.forEach(({ name, value, options }) => {
-            if (isSessionOnly && name.includes('-auth-token')) {
+            if (isSessionOnly && name.includes("-auth-token")) {
               delete options.maxAge;
               delete options.expires;
             }
