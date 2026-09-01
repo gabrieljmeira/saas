@@ -191,8 +191,8 @@ export async function generateApproachAction(leadId: string) {
   return res;
 }
 import { profiles } from '@saas/db/schema/users';
-import { consumeSearch, completeSearch, refundSearch } from '@saas/core/billing';
-import { PlanType } from '@saas/core/billing';
+import { consumeSearch, completeSearch, refundSearch } from '@saas/core';
+import { PlanType } from '@saas/core';
 
 export async function startSearchAction() {
   const supabase = await createClient();

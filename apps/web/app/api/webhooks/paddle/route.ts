@@ -3,7 +3,7 @@ import { db } from "@saas/db/client";
 import { profiles } from "@saas/db/schema/users";
 import { webhookEvents } from "@saas/db/schema/billing";
 import { eq } from "drizzle-orm";
-import { addCredits } from "@saas/core/billing";
+import { addCredits } from "@saas/core";
 import { Environment, Paddle } from "@paddle/paddle-node-sdk";
 
 // Inicializa SDK (se PADDLE_API_KEY existir)
