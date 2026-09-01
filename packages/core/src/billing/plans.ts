@@ -44,7 +44,8 @@ export const PLAN_CONFIG: Record<PlanType, PlanConfig> = {
   FREELANCER: {
     name: "Freelancer",
     priceId: {
-      monthly: process.env.NEXT_PUBLIC_PADDLE_FREELANCER_MONTHLY_PRICE_ID || null,
+      monthly:
+        process.env.NEXT_PUBLIC_PADDLE_FREELANCER_MONTHLY_PRICE_ID || null,
       annual: process.env.NEXT_PUBLIC_PADDLE_FREELANCER_ANNUAL_PRICE_ID || null,
     },
     searchesPerDay: 10,

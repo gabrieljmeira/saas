@@ -7,9 +7,16 @@ import { addCredits } from "@saas/core/billing";
 import { Environment, Paddle } from "@paddle/paddle-node-sdk";
 
 // Inicializa SDK (se PADDLE_API_KEY existir)
-const paddle = new Paddle(process.env.PADDLE_API_KEY || process.env.PADDLE_SANDBOX_API_KEY || "", {
-  environment: process.env.PADDLE_ENV === "sandbox" || process.env.NODE_ENV === "development" ? Environment.sandbox : Environment.production,
-});
+const paddle = new Paddle(
+  process.env.PADDLE_API_KEY || process.env.PADDLE_SANDBOX_API_KEY || "",
+  {
+    environment:
+      process.env.PADDLE_ENV === "sandbox" ||
+      process.env.NODE_ENV === "development"
+        ? Environment.sandbox
+        : Environment.production,
+  },
+);
 
 export async function POST(req: Request) {
   try {
@@ -48,7 +55,10 @@ export async function POST(req: Request) {
     });
 
     if (existingEvent) {
-      return NextResponse.json({ message: "Already processed" }, { status: 200 });
+      return NextResponse.json(
+        { message: "Already processed" },
+        { status: 200 },
+      );
     }
 
     // Log the event
@@ -78,17 +88,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
     console.error("Webhook error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
 
 async function handleTransactionCompleted(data: any) {
   // Ignorar transações de assinaturas (elas são geridas nos webhooks de subscription)
-  if (data.origin !== "web" && data.origin !== "api") return; 
+  if (data.origin !== "web" && data.origin !== "api") return;
 
   const items = data.items || [];
   const customerId = data.customer_id;
-  
+
   if (!customerId) return;
 
   const profile = await db.query.profiles.findFirst({
@@ -103,9 +116,12 @@ async function handleTransactionCompleted(data: any) {
     if (!priceId) continue;
 
     let addedCredits = 0;
-    if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_8_PRICE_ID) addedCredits = 8;
-    else if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_20_PRICE_ID) addedCredits = 20;
-    else if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_40_PRICE_ID) addedCredits = 40;
+    if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_8_PRICE_ID)
+      addedCredits = 8;
+    else if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_20_PRICE_ID)
+      addedCredits = 20;
+    else if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_40_PRICE_ID)
+      addedCredits = 40;
 
     if (addedCredits > 0) {
       await addCredits(profile.id, addedCredits * item.quantity, data.id);
@@ -127,27 +143,39 @@ async function handleSubscriptionUpdated(data: any) {
     where: eq(profiles.paddleCustomerId, customerId),
   });
 
-  if (!profile) return; // Se o cliente ainda não foi associado, não podemos vincular. 
+  if (!profile) return; // Se o cliente ainda não foi associado, não podemos vincular.
   // Na prática real, você poderia associar pelo email se houvesse na payload.
 
   // Determine plan based on first item price ID
   const priceId = data.items?.[0]?.price?.id;
   let plan: "FREE" | "FREELANCER" | "AGENCY" = "FREE";
 
-  if (priceId === process.env.NEXT_PUBLIC_PADDLE_FREELANCER_MONTHLY_PRICE_ID || priceId === process.env.NEXT_PUBLIC_PADDLE_FREELANCER_ANNUAL_PRICE_ID) {
+  if (
+    priceId === process.env.NEXT_PUBLIC_PADDLE_FREELANCER_MONTHLY_PRICE_ID ||
+    priceId === process.env.NEXT_PUBLIC_PADDLE_FREELANCER_ANNUAL_PRICE_ID
+  ) {
     plan = "FREELANCER";
-  } else if (priceId === process.env.NEXT_PUBLIC_PADDLE_AGENCY_MONTHLY_PRICE_ID || priceId === process.env.NEXT_PUBLIC_PADDLE_AGENCY_ANNUAL_PRICE_ID) {
+  } else if (
+    priceId === process.env.NEXT_PUBLIC_PADDLE_AGENCY_MONTHLY_PRICE_ID ||
+    priceId === process.env.NEXT_PUBLIC_PADDLE_AGENCY_ANNUAL_PRICE_ID
+  ) {
     plan = "AGENCY";
   }
 
   // Se o status for past_due, a subscription_status = past_due, etc.
   // Atualiza no banco
-  await db.update(profiles)
+  await db
+    .update(profiles)
     .set({
-      plan: status === "active" || status === "trialing" || status === "past_due" ? plan : "FREE",
+      plan:
+        status === "active" || status === "trialing" || status === "past_due"
+          ? plan
+          : "FREE",
       paddleSubscriptionId: subscriptionId,
       subscriptionStatus: status,
-      currentPeriodStart: currentPeriodStart ? new Date(currentPeriodStart) : null,
+      currentPeriodStart: currentPeriodStart
+        ? new Date(currentPeriodStart)
+        : null,
       currentPeriodEnd: currentPeriodEnd ? new Date(currentPeriodEnd) : null,
       cancelAtPeriodEnd: !!cancelAtPeriodEnd,
     })
@@ -156,10 +184,11 @@ async function handleSubscriptionUpdated(data: any) {
 
 async function handleSubscriptionCanceled(data: any) {
   const customerId = data.customer_id;
-  
+
   if (!customerId) return;
 
-  await db.update(profiles)
+  await db
+    .update(profiles)
     .set({
       plan: "FREE",
       subscriptionStatus: "canceled",
