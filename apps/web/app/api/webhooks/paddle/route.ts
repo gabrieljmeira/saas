@@ -103,9 +103,9 @@ async function handleTransactionCompleted(data: any) {
     if (!priceId) continue;
 
     let addedCredits = 0;
-    if (priceId === process.env.PADDLE_CREDITS_8_PRICE_ID) addedCredits = 8;
-    else if (priceId === process.env.PADDLE_CREDITS_20_PRICE_ID) addedCredits = 20;
-    else if (priceId === process.env.PADDLE_CREDITS_40_PRICE_ID) addedCredits = 40;
+    if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_8_PRICE_ID) addedCredits = 8;
+    else if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_20_PRICE_ID) addedCredits = 20;
+    else if (priceId === process.env.NEXT_PUBLIC_PADDLE_CREDITS_40_PRICE_ID) addedCredits = 40;
 
     if (addedCredits > 0) {
       await addCredits(profile.id, addedCredits * item.quantity, data.id);
@@ -134,9 +134,9 @@ async function handleSubscriptionUpdated(data: any) {
   const priceId = data.items?.[0]?.price?.id;
   let plan: "FREE" | "FREELANCER" | "AGENCY" = "FREE";
 
-  if (priceId === process.env.PADDLE_FREELANCER_MONTHLY_PRICE_ID || priceId === process.env.PADDLE_FREELANCER_ANNUAL_PRICE_ID) {
+  if (priceId === process.env.NEXT_PUBLIC_PADDLE_FREELANCER_MONTHLY_PRICE_ID || priceId === process.env.NEXT_PUBLIC_PADDLE_FREELANCER_ANNUAL_PRICE_ID) {
     plan = "FREELANCER";
-  } else if (priceId === process.env.PADDLE_AGENCY_MONTHLY_PRICE_ID || priceId === process.env.PADDLE_AGENCY_ANNUAL_PRICE_ID) {
+  } else if (priceId === process.env.NEXT_PUBLIC_PADDLE_AGENCY_MONTHLY_PRICE_ID || priceId === process.env.NEXT_PUBLIC_PADDLE_AGENCY_ANNUAL_PRICE_ID) {
     plan = "AGENCY";
   }
 

@@ -44,8 +44,8 @@ export const PLAN_CONFIG: Record<PlanType, PlanConfig> = {
   FREELANCER: {
     name: "Freelancer",
     priceId: {
-      monthly: process.env.PADDLE_FREELANCER_MONTHLY_PRICE_ID || null,
-      annual: process.env.PADDLE_FREELANCER_ANNUAL_PRICE_ID || null,
+      monthly: process.env.NEXT_PUBLIC_PADDLE_FREELANCER_MONTHLY_PRICE_ID || null,
+      annual: process.env.NEXT_PUBLIC_PADDLE_FREELANCER_ANNUAL_PRICE_ID || null,
     },
     searchesPerDay: 10,
     maxResultsPerSearch: null,
@@ -65,8 +65,8 @@ export const PLAN_CONFIG: Record<PlanType, PlanConfig> = {
   AGENCY: {
     name: "Agência",
     priceId: {
-      monthly: process.env.PADDLE_AGENCY_MONTHLY_PRICE_ID || null,
-      annual: process.env.PADDLE_AGENCY_ANNUAL_PRICE_ID || null,
+      monthly: process.env.NEXT_PUBLIC_PADDLE_AGENCY_MONTHLY_PRICE_ID || null,
+      annual: process.env.NEXT_PUBLIC_PADDLE_AGENCY_ANNUAL_PRICE_ID || null,
     },
     searchesPerDay: null,
     maxResultsPerSearch: null,
@@ -88,21 +88,21 @@ export const PLAN_CONFIG: Record<PlanType, PlanConfig> = {
 export const CREDIT_PACKAGES = [
   {
     id: "credits_8",
-    priceId: process.env.PADDLE_CREDITS_8_PRICE_ID || null,
+    priceId: process.env.NEXT_PUBLIC_PADDLE_CREDITS_8_PRICE_ID || null,
     credits: 8,
     price: 10.0,
     isPopular: false,
   },
   {
     id: "credits_20",
-    priceId: process.env.PADDLE_CREDITS_20_PRICE_ID || null,
+    priceId: process.env.NEXT_PUBLIC_PADDLE_CREDITS_20_PRICE_ID || null,
     credits: 20,
     price: 19.99,
     isPopular: true,
   },
   {
     id: "credits_40",
-    priceId: process.env.PADDLE_CREDITS_40_PRICE_ID || null,
+    priceId: process.env.NEXT_PUBLIC_PADDLE_CREDITS_40_PRICE_ID || null,
     credits: 40,
     price: 30.0,
     isPopular: false,
