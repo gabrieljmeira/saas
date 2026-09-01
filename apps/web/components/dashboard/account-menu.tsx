@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronDown, CreditCard, LogOut, Settings, User as UserIcon, BadgeCheck } from "lucide-react";
+import {
+  ChevronDown,
+  CreditCard,
+  LogOut,
+  Settings,
+  User as UserIcon,
+  BadgeCheck,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 import {
@@ -41,7 +48,8 @@ export function AccountMenu({ profile }: AccountMenuProps) {
   };
 
   const showBadge = profile.role === "STAFF" || profile.role === "OWNER";
-  const badgeText = profile.role === "STAFF" ? "Equipe FetchLeads" : "Conta oficial";
+  const badgeText =
+    profile.role === "STAFF" ? "Equipe FetchLeads" : "Conta oficial";
 
   return (
     <DropdownMenu>
@@ -57,11 +65,11 @@ export function AccountMenu({ profile }: AccountMenuProps) {
             </span>
           )}
         </div>
-        
+
         {profile.avatarUrl ? (
-          <img 
-            src={profile.avatarUrl} 
-            alt={profile.name || "Avatar"} 
+          <img
+            src={profile.avatarUrl}
+            alt={profile.name || "Avatar"}
             className="w-9 h-9 rounded-full object-cover border border-border-subtle group-hover:border-primary/30 transition-colors"
           />
         ) : (
@@ -69,7 +77,7 @@ export function AccountMenu({ profile }: AccountMenuProps) {
             {getInitials(profile.name, profile.email)}
           </div>
         )}
-        
+
         <ChevronDown className="w-3.5 h-3.5 text-text-muted group-hover:text-text-primary transition-transform duration-200 group-data-[state=open]:rotate-180 hidden sm:block" />
       </DropdownMenuTrigger>
 
@@ -85,28 +93,39 @@ export function AccountMenu({ profile }: AccountMenuProps) {
             {showBadge && (
               <div className="flex items-center gap-1.5 mt-2 text-primary">
                 <BadgeCheck className="w-3.5 h-3.5" />
-                <span className="text-xs font-medium">{badgeText} FetchLeads</span>
+                <span className="text-xs font-medium">
+                  {badgeText} FetchLeads
+                </span>
               </div>
             )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push("/configuracoes")} className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/configuracoes")}
+            className="cursor-pointer"
+          >
             <UserIcon className="w-4 h-4 mr-2" />
             <span>Minha conta</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/configuracoes")} className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/configuracoes")}
+            className="cursor-pointer"
+          >
             <Settings className="w-4 h-4 mr-2" />
             <span>Configurações</span>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push("/configuracoes/billing")} className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/configuracoes/billing")}
+            className="cursor-pointer"
+          >
             <CreditCard className="w-4 h-4 mr-2" />
             <span>Plano e cobrança</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem 
+        <DropdownMenuItem
           onClick={handleSignOut}
           className="text-red-500 focus:text-red-500 focus:bg-red-500/10 cursor-pointer transition-colors"
         >

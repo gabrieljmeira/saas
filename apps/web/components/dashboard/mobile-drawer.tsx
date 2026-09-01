@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import {
-  Menu,
-  X,
-  Settings,
-} from "lucide-react";
+import { Menu, X, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
 

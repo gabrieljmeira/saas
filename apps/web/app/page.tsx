@@ -82,26 +82,38 @@ export default async function Home() {
           <div className="container mx-auto px-4 sm:px-6 relative z-10">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
               {/* Left Column: Copy & CTAs */}
-              <div className="max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border-default text-xs font-medium text-primary mb-6">
+              <div className="max-w-2xl">
+                <div 
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border-default text-xs font-medium text-primary mb-6 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
+                  style={{ animationFillMode: "both", animationDelay: "0ms" }}
+                >
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Prospecção para freelancers e agências
                 </div>
 
-                <h1 className="text-[40px] sm:text-[48px] lg:text-[64px] font-bold tracking-tight text-text-primary leading-[1.1] mb-6">
+                <h1 
+                  className="text-[40px] sm:text-[48px] lg:text-[64px] font-bold tracking-tight text-text-primary leading-[1.1] mb-6 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-500"
+                  style={{ animationFillMode: "both", animationDelay: "80ms" }}
+                >
                   Encontre oportunidades.
                   <br className="hidden sm:block" />
                   <span className="text-text-secondary">Comece conversas.</span>
                 </h1>
 
-                <p className="text-base sm:text-lg text-text-muted mb-8 leading-relaxed max-w-[540px]">
+                <p 
+                  className="text-base sm:text-lg text-text-muted mb-8 leading-relaxed max-w-[540px] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-500"
+                  style={{ animationFillMode: "both", animationDelay: "160ms" }}
+                >
                   Busque empresas por nicho e região, identifique as melhores
                   oportunidades e inicie uma abordagem via{" "}
                   <span className="text-[#25D366] font-medium">WhatsApp</span>{" "}
                   sem perder tempo pesquisando.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div 
+                  className="flex flex-col sm:flex-row items-center gap-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-500"
+                  style={{ animationFillMode: "both", animationDelay: "240ms" }}
+                >
                   <Link href="/signup" className="w-full sm:w-auto">
                     <Button
                       size="lg"
@@ -122,7 +134,10 @@ export default async function Home() {
                   </Link>
                 </div>
 
-                <div className="mt-8 flex items-center gap-6 text-sm text-text-muted">
+                <div 
+                  className="mt-8 flex items-center gap-6 text-sm text-text-muted motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500"
+                  style={{ animationFillMode: "both", animationDelay: "320ms" }}
+                >
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-success" />
                     Sem cartão de crédito
@@ -137,7 +152,8 @@ export default async function Home() {
               {/* Right Column: Product Preview */}
               <div
                 id="produto"
-                className="relative mx-auto w-full max-w-[600px] lg:max-w-none animate-in fade-in zoom-in-95 duration-1000 delay-150 mt-4 lg:mt-0"
+                className="relative mx-auto w-full max-w-[600px] lg:max-w-none motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-4 motion-safe:duration-700 mt-4 lg:mt-0"
+                style={{ animationFillMode: "both", animationDelay: "400ms" }}
               >
                 {/* Decorative Elements */}
                 <div className="absolute -inset-1 bg-gradient-to-tr from-primary/20 via-border-default to-transparent rounded-2xl blur-lg opacity-50" />
@@ -234,7 +250,10 @@ export default async function Home() {
                 </div>
 
                 {/* Floating tooltips/decorators */}
-                <div className="absolute -right-4 top-16 bg-surface border border-border-strong rounded-lg p-3 shadow-xl hidden sm:block animate-in fade-in slide-in-from-right-8 duration-700 delay-500">
+                <div 
+                  className="absolute -right-4 top-16 bg-surface border border-border-strong rounded-lg p-3 shadow-xl hidden sm:block motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-8 motion-safe:duration-500"
+                  style={{ animationFillMode: "both", animationDelay: "500ms" }}
+                >
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                     <span className="text-xs font-medium text-text-primary">
