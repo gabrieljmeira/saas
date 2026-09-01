@@ -46,11 +46,12 @@ export default async function proxy(request: NextRequest) {
           request,
         });
         cookiesToSet.forEach(({ name, value, options }) => {
+          const cookieOptions = { ...options };
           if (isSessionOnly && name.includes('-auth-token')) {
-            delete options.maxAge;
-            delete options.expires;
+            delete cookieOptions.maxAge;
+            delete cookieOptions.expires;
           }
-          supabaseResponse.cookies.set(name, value, options);
+          supabaseResponse.cookies.set(name, value, cookieOptions);
         });
       },
     },
