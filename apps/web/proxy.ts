@@ -37,7 +37,8 @@ export default async function proxy(request: NextRequest) {
       },
       setAll(cookiesToSet) {
         // Read the custom preference cookie
-        const isSessionOnly = request.cookies.get("sb-remember-me")?.value === "false";
+        const isSessionOnly =
+          request.cookies.get("sb-remember-me")?.value === "false";
 
         cookiesToSet.forEach(({ name, value }) =>
           request.cookies.set(name, value),
@@ -47,7 +48,7 @@ export default async function proxy(request: NextRequest) {
         });
         cookiesToSet.forEach(({ name, value, options }) => {
           const cookieOptions = { ...options };
-          if (isSessionOnly && name.includes('-auth-token')) {
+          if (isSessionOnly && name.includes("-auth-token")) {
             delete cookieOptions.maxAge;
             delete cookieOptions.expires;
           }

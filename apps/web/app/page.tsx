@@ -83,7 +83,7 @@ export default async function Home() {
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
               {/* Left Column: Copy & CTAs */}
               <div className="max-w-2xl">
-                <div 
+                <div
                   className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border-default text-xs font-medium text-primary mb-6 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-500"
                   style={{ animationFillMode: "both", animationDelay: "0ms" }}
                 >
@@ -91,7 +91,7 @@ export default async function Home() {
                   Prospecção para freelancers e agências
                 </div>
 
-                <h1 
+                <h1
                   className="text-[40px] sm:text-[48px] lg:text-[64px] font-bold tracking-tight text-text-primary leading-[1.1] mb-6 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-500"
                   style={{ animationFillMode: "both", animationDelay: "80ms" }}
                 >
@@ -100,7 +100,7 @@ export default async function Home() {
                   <span className="text-text-secondary">Comece conversas.</span>
                 </h1>
 
-                <p 
+                <p
                   className="text-base sm:text-lg text-text-muted mb-8 leading-relaxed max-w-[540px] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-500"
                   style={{ animationFillMode: "both", animationDelay: "160ms" }}
                 >
@@ -110,7 +110,7 @@ export default async function Home() {
                   sem perder tempo pesquisando.
                 </p>
 
-                <div 
+                <div
                   className="flex flex-col sm:flex-row items-center gap-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-3 motion-safe:duration-500"
                   style={{ animationFillMode: "both", animationDelay: "240ms" }}
                 >
@@ -134,7 +134,7 @@ export default async function Home() {
                   </Link>
                 </div>
 
-                <div 
+                <div
                   className="mt-8 flex items-center gap-6 text-sm text-text-muted motion-safe:animate-in motion-safe:fade-in motion-safe:duration-500"
                   style={{ animationFillMode: "both", animationDelay: "320ms" }}
                 >
@@ -250,7 +250,7 @@ export default async function Home() {
                 </div>
 
                 {/* Floating tooltips/decorators */}
-                <div 
+                <div
                   className="absolute -right-4 top-16 bg-surface border border-border-strong rounded-lg p-3 shadow-xl hidden sm:block motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-8 motion-safe:duration-500"
                   style={{ animationFillMode: "both", animationDelay: "500ms" }}
                 >
