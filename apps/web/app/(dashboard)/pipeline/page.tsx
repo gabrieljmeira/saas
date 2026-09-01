@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { db } from "@saas/db/client";
+import { opportunities, leads } from "@saas/db/schema";
+import { eq, desc, and, notInArray } from "drizzle-orm";
 import {
   KanbanSquare,
   Search,
@@ -7,12 +10,13 @@ import {
   Filter,
   MoreHorizontal,
   MessageSquare,
-  Phone,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LeadScore } from "@/components/ui/lead-score";
 import { DashboardSurface } from "@/components/ui/dashboard-surface";
+import { PageHeader } from "@/components/ui/page-header";
+import { MascotSearching } from "@/components/ui/mascot-searching";
 
 export default async function PipelinePage() {
   const supabase = await createClient();
@@ -24,112 +28,109 @@ export default async function PipelinePage() {
     redirect("/login");
   }
 
-  // Realistic mock data to show the design of the pipeline
-  const pipelineData = [
+  // Fetch real opportunities from DB
+  const rawOpportunities = await db
+    .select({
+      id: opportunities.id,
+      status: opportunities.status,
+      expectedValueCents: opportunities.expectedValueCents,
+      notes: opportunities.notes,
+      updatedAt: opportunities.updatedAt,
+      leadId: opportunities.leadId,
+      leadName: leads.name,
+      leadScore: leads.leadScore,
+      hasWhatsapp: leads.hasWhatsapp,
+    })
+    .from(opportunities)
+    .innerJoin(leads, eq(opportunities.leadId, leads.id))
+    .where(
+      and(
+        eq(opportunities.userId, user.id),
+        notInArray(opportunities.status, ["won", "lost"]),
+      ),
+    )
+    .orderBy(desc(opportunities.updatedAt));
+
+  const formatCurrency = (cents: number | null) => {
+    if (!cents) return "R$ --";
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(cents / 100);
+  };
+
+  const getTimeAgo = (date: Date) => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return "Agora";
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `Há ${diffInMinutes}m`;
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `Há ${diffInHours}h`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays === 1) return "Ontem";
+    if (diffInDays < 30) return `Há ${diffInDays}d`;
+
+    return date.toLocaleDateString("pt-BR", { month: "short", day: "numeric" });
+  };
+
+  // Group by status
+  const columnsDef = [
+    { id: "new", title: "Novo", color: "border-text-muted/20 bg-text-muted/5" },
     {
-      title: "Novo",
-      color: "border-text-muted/20 bg-text-muted/5",
-      cards: [
-        {
-          id: 1,
-          name: "Consultoria Apex",
-          value: "R$ 2.400",
-          nextAction: "Qualificar lead",
-          score: 85,
-          time: "Há 2h",
-        },
-        {
-          id: 2,
-          name: "Padaria São João",
-          value: "R$ 800",
-          nextAction: "Analisar site",
-          score: 52,
-          time: "Há 1d",
-        },
-      ],
-    },
-    {
+      id: "qualified",
       title: "Qualificado",
       color: "border-primary/20 bg-primary/5",
-      cards: [
-        {
-          id: 3,
-          name: "Escritório Mendonça",
-          value: "R$ 4.500",
-          nextAction: "Primeiro contato",
-          score: 92,
-          time: "Hoje",
-        },
-      ],
     },
     {
+      id: "contacted",
       title: "Contatado",
       color: "border-accent/20 bg-accent/5",
-      cards: [
-        {
-          id: 4,
-          name: "Clínica Vida",
-          value: "R$ 1.200",
-          nextAction: "Aguardando resposta",
-          score: 78,
-          time: "Ontem",
-        },
-        {
-          id: 5,
-          name: "Petshop Cão & Gato",
-          value: "R$ 1.500",
-          nextAction: "Follow-up",
-          score: 65,
-          time: "Há 3d",
-        },
-      ],
     },
     {
+      id: "replied",
       title: "Respondeu",
       color: "border-orange-500/20 bg-orange-500/5",
-      cards: [],
     },
     {
+      id: "proposal",
       title: "Proposta",
       color: "border-purple-500/20 bg-purple-500/5",
-      cards: [
-        {
-          id: 6,
-          name: "Logística Express",
-          value: "R$ 12.000",
-          nextAction: "Reunião de fechamento",
-          score: 95,
-          time: "Hoje",
-        },
-      ],
     },
   ];
 
-  return (
-    <div className="flex-1 p-6 md:p-8 max-w-[1600px] mx-auto w-full flex flex-col gap-6 animate-in fade-in duration-500 h-[calc(100vh-64px)]">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 shrink-0">
-        <div>
-          <h2 className="text-2xl font-semibold text-text-primary tracking-tight mb-1">
-            Pipeline
-          </h2>
-          <p className="text-sm text-text-muted">
-            Acompanhe e movimente suas oportunidades ativas.
-          </p>
-        </div>
+  const pipelineData = columnsDef.map((col) => {
+    const colOpps = rawOpportunities.filter((o) => o.status === col.id);
+    return {
+      ...col,
+      cards: colOpps,
+    };
+  });
 
-        <div className="flex items-center gap-3">
+  return (
+    <div className="w-full max-w-[1600px] mx-auto pb-12 animate-in fade-in duration-500 h-[calc(100vh-64px)] flex flex-col">
+      <div className="shrink-0 mb-6">
+        <PageHeader
+          title="Pipeline"
+          description="Acompanhe e movimente suas oportunidades ativas."
+        />
+        <div className="flex items-center gap-3 mt-4">
           <div className="relative hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
             <Input
               placeholder="Pesquisar negócio..."
-              className="pl-9 h-9 bg-surface-elevated w-64 border-border-default"
+              className="pl-9 h-9 bg-surface-elevated w-64 border-border-default text-sm"
             />
           </div>
-          <Button variant="outline" size="icon" className="h-9 w-9">
-            <Filter className="w-4 h-4" />
+          <Button variant="outline" size="sm" className="h-9">
+            <Filter className="w-4 h-4 mr-2" />
+            Filtros
           </Button>
-          <Button className="h-9 shadow-sm">
+          <Button size="sm" className="h-9 shadow-sm">
             <Plus className="w-4 h-4 mr-2" />
             Nova Oportunidade
           </Button>
@@ -137,70 +138,75 @@ export default async function PipelinePage() {
       </div>
 
       {/* Kanban Board Container */}
-      <div className="flex-1 flex gap-6 overflow-x-auto pb-4 snap-x">
+      <div className="flex-1 flex gap-4 overflow-x-auto pb-6 snap-x min-h-0 custom-scrollbar">
         {pipelineData.map((col, index) => (
           <div
             key={index}
-            className="flex-shrink-0 w-[300px] flex flex-col gap-3 snap-start"
+            className="flex-shrink-0 w-[280px] md:w-[320px] flex flex-col gap-3 snap-start"
           >
             {/* Column Header */}
             <div
-              className={`px-3 py-2 rounded-md border ${col.color} flex items-center justify-between`}
+              className={`px-3 py-2.5 rounded-lg border ${col.color} flex items-center justify-between shadow-sm shrink-0`}
             >
-              <h3 className="font-semibold text-sm text-text-primary tracking-wide">
+              <h3 className="font-bold text-sm text-text-primary tracking-wide">
                 {col.title}
               </h3>
-              <span className="text-xs font-bold px-1.5 py-0.5 rounded bg-surface/50 text-text-secondary">
+              <span className="text-xs font-bold px-2 py-0.5 rounded bg-background/50 border border-border-subtle text-text-secondary">
                 {col.cards.length}
               </span>
             </div>
 
             {/* Column Body / Cards */}
-            <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-1">
+            <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-1 pb-4 custom-scrollbar">
               {col.cards.length === 0 ? (
-                <div className="h-24 rounded-lg border border-dashed border-border-subtle flex items-center justify-center text-xs text-text-muted">
-                  Nenhum card
+                <div className="h-32 rounded-xl border border-dashed border-border-strong flex flex-col items-center justify-center text-xs text-text-muted bg-surface/50">
+                  <KanbanSquare className="w-6 h-6 mb-2 opacity-20" />
+                  Nenhuma oportunidade
                 </div>
               ) : (
                 col.cards.map((card) => (
                   <DashboardSurface
                     key={card.id}
-                    className="p-3.5 group hover:border-primary/40 transition-colors cursor-grab active:cursor-grabbing"
+                    className="p-4 group hover:border-primary/40 transition-colors cursor-grab active:cursor-grabbing flex flex-col gap-3 shadow-sm hover:shadow-md"
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-semibold text-sm text-text-primary leading-tight line-clamp-1">
-                        {card.name}
+                    <div className="flex justify-between items-start">
+                      <h4 className="font-semibold text-[13px] text-text-primary leading-tight line-clamp-1">
+                        {card.leadName}
                       </h4>
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        className="h-5 w-5 -mr-1 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="h-5 w-5 -mr-1 -mt-1 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity"
                       >
-                        <MoreHorizontal className="w-3 h-3" />
+                        <MoreHorizontal className="w-4 h-4" />
                       </Button>
                     </div>
 
-                    <div className="text-sm font-bold text-text-primary mb-3">
-                      {card.value}
+                    <div className="text-sm font-bold text-text-primary">
+                      {formatCurrency(card.expectedValueCents)}
                     </div>
 
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                      <span className="text-xs font-medium text-text-secondary line-clamp-1">
-                        {card.nextAction}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-3 border-t border-border-subtle">
-                      <LeadScore score={card.score} size="sm" />
-
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] text-text-muted font-medium mr-1">
-                          {card.time}
+                    {card.notes && (
+                      <div className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 mt-1.5 rounded-full bg-accent shrink-0" />
+                        <span className="text-[11px] font-medium text-text-secondary line-clamp-2 leading-relaxed">
+                          {card.notes}
                         </span>
-                        <div className="w-6 h-6 rounded bg-success/10 text-success flex items-center justify-center hover:bg-success/20 transition-colors">
-                          <MessageSquare className="w-3 h-3" />
-                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between pt-3 border-t border-border-subtle mt-1">
+                      <LeadScore score={card.leadScore || 0} size="sm" />
+
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-text-muted font-medium">
+                          {getTimeAgo(card.updatedAt)}
+                        </span>
+                        {card.hasWhatsapp && (
+                          <div className="w-6 h-6 rounded bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366]/20 transition-colors border border-[#25D366]/20">
+                            <MessageSquare className="w-3 h-3" />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </DashboardSurface>
@@ -209,14 +215,6 @@ export default async function PipelinePage() {
             </div>
           </div>
         ))}
-
-        {/* Create New Column Button */}
-        <div className="flex-shrink-0 w-[300px]">
-          <button className="w-full px-3 py-2 rounded-md border border-dashed border-border-default text-text-muted text-sm font-medium hover:border-text-primary hover:text-text-primary transition-colors flex items-center justify-center gap-2">
-            <Plus className="w-4 h-4" />
-            Adicionar Estágio
-          </button>
-        </div>
       </div>
     </div>
   );

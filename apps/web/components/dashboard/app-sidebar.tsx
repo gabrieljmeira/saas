@@ -54,7 +54,7 @@ export function AppSidebar() {
         <FetchLeadsLogo
           state="default"
           href="/"
-          className="hover:opacity-100"
+          className="hover:opacity-100 max-w-[130px]"
         />
       </div>
 
@@ -62,7 +62,7 @@ export function AppSidebar() {
         {navigationGroups.map((group, i) => (
           <div key={i} className="flex flex-col gap-1">
             {group.label && (
-              <h4 className="text-[10px] font-bold text-text-muted uppercase tracking-wider mb-2 px-3">
+              <h4 className="text-[11px] font-semibold text-text-muted/70 tracking-[0.08em] uppercase mb-1.5 px-3">
                 {group.label}
               </h4>
             )}
@@ -76,22 +76,23 @@ export function AppSidebar() {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm",
+                      "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-[13px]",
                       isActive
-                        ? "text-text-primary font-medium bg-primary/10"
+                        ? "text-text-primary font-medium bg-primary/5"
                         : "text-text-secondary hover:text-text-primary hover:bg-surface-hover",
                     )}
                   >
                     {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full" />
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-primary rounded-r-full" />
                     )}
                     <Icon
                       className={cn(
                         "w-4 h-4 transition-colors",
                         isActive
                           ? "text-primary"
-                          : "text-text-muted group-hover:text-text-primary",
+                          : "text-text-muted group-hover:text-text-secondary",
                       )}
+                      strokeWidth={isActive ? 2.5 : 2}
                     />
                     <span>{item.name}</span>
                   </Link>
@@ -106,22 +107,23 @@ export function AppSidebar() {
         <Link
           href="/configuracoes"
           className={cn(
-            "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-sm",
+            "group relative flex items-center gap-3 px-3 py-2 rounded-md transition-all text-[13px]",
             pathname.startsWith("/configuracoes")
-              ? "text-text-primary font-medium bg-primary/10"
+              ? "text-text-primary font-medium bg-primary/5"
               : "text-text-secondary hover:text-text-primary hover:bg-surface-hover",
           )}
         >
           {pathname.startsWith("/configuracoes") && (
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-primary rounded-r-full" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-primary rounded-r-full" />
           )}
           <Settings
             className={cn(
               "w-4 h-4 transition-colors",
               pathname.startsWith("/configuracoes")
                 ? "text-primary"
-                : "text-text-muted group-hover:text-text-primary",
+                : "text-text-muted group-hover:text-text-secondary",
             )}
+            strokeWidth={pathname.startsWith("/configuracoes") ? 2.5 : 2}
           />
           <span>Configurações</span>
         </Link>

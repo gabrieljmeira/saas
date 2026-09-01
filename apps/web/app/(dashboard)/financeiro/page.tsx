@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { db } from "@saas/db/client";
+import { opportunities, leads } from "@saas/db/schema";
+import { eq, and, desc, isNotNull } from "drizzle-orm";
 import {
   DollarSign,
   TrendingUp,
@@ -8,9 +11,12 @@ import {
   Download,
   Calendar,
   ArrowUpRight,
+  CheckCircle2,
 } from "lucide-react";
 import { DashboardSurface } from "@/components/ui/dashboard-surface";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
+import { MascotSearching } from "@/components/ui/mascot-searching";
 
 export default async function FinanceiroPage() {
   const supabase = await createClient();
@@ -22,216 +28,166 @@ export default async function FinanceiroPage() {
     redirect("/login");
   }
 
+  // Fetch real won opportunities
+  const wonOpps = await db
+    .select({
+      id: opportunities.id,
+      actualValueCents: opportunities.actualValueCents,
+      expectedValueCents: opportunities.expectedValueCents,
+      closedAt: opportunities.closedAt,
+      leadName: leads.name,
+    })
+    .from(opportunities)
+    .leftJoin(leads, eq(opportunities.leadId, leads.id))
+    .where(
+      and(eq(opportunities.userId, user.id), eq(opportunities.status, "won")),
+    )
+    .orderBy(desc(opportunities.closedAt));
+
+  const totalWon = wonOpps.length;
+  const totalRevenue = wonOpps.reduce(
+    (acc, curr) =>
+      acc + (curr.actualValueCents || curr.expectedValueCents || 0),
+    0,
+  );
+  const averageTicket = totalWon > 0 ? totalRevenue / totalWon : 0;
+
+  const formatCurrency = (cents: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(cents / 100);
+  };
+
   const metrics = [
     {
       title: "Vendas Fechadas",
-      value: "3",
-      sub: "+1 em relação a ontem",
+      value: totalWon.toString(),
+      sub: "Oportunidades ganhas",
       icon: Trophy,
       color: "text-primary",
       bg: "bg-primary/10",
+      border: "border-primary/20",
     },
     {
       title: "Receita Total",
-      value: "R$ 4.500,00",
-      sub: "+R$ 1.500 nesta semana",
+      value: formatCurrency(totalRevenue),
+      sub: "Baseado no valor fechado",
       icon: TrendingUp,
       color: "text-success",
       bg: "bg-success/10",
+      border: "border-success/20",
     },
     {
       title: "Ticket Médio",
-      value: "R$ 1.500,00",
-      sub: "Estável",
+      value: formatCurrency(averageTicket),
+      sub: "Média por oportunidade",
       icon: CreditCard,
       color: "text-accent",
       bg: "bg-accent/10",
-    },
-  ];
-
-  const recentDeals = [
-    {
-      name: "Clínica Odontológica Exemplo",
-      value: 1500,
-      date: "Hoje, 14:30",
-      type: "Setup de CRM",
-      status: "Fechado",
-    },
-    {
-      name: "Escritório de Advocacia Demo",
-      value: 3000,
-      date: "Ontem, 09:15",
-      type: "Assessoria de Marketing",
-      status: "Fechado",
+      border: "border-accent/20",
     },
   ];
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto p-4 md:p-6 space-y-6">
-      {/* HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-text-primary tracking-tight">
-            Financeiro e Resultados
-          </h1>
-          <p className="text-sm text-text-muted mt-1">
-            Acompanhe a conversão do seu pipeline em receita real.
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button variant="outline" className="h-9">
-            <Calendar className="w-4 h-4 mr-2" />
-            Este Mês
-          </Button>
-          <Button variant="outline" className="h-9 text-text-primary">
-            <Download className="w-4 h-4 mr-2" />
-            Exportar
-          </Button>
-        </div>
+    <div className="w-full max-w-[1200px] mx-auto pb-12 animate-in fade-in duration-500">
+      <div className="flex flex-col sm:flex-row gap-4 justify-between items-end mb-8">
+        <PageHeader
+          title="Financeiro e Resultados"
+          description="Acompanhe a conversão do seu pipeline em receita real."
+        />
+        <Button variant="outline" size="sm" className="h-9">
+          <Download className="w-4 h-4 mr-2" />
+          Exportar Relatório
+        </Button>
       </div>
 
-      {/* METRICS ROW */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {metrics.map((metric) => (
-          <DashboardSurface key={metric.title} className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-text-secondary">
-                {metric.title}
-              </h3>
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${metric.bg} ${metric.color}`}
-              >
-                <metric.icon className="w-4 h-4" />
-              </div>
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {metrics.map((m, i) => (
+          <DashboardSurface
+            key={i}
+            className={`p-6 flex items-start gap-4 hover:border-border-strong transition-colors`}
+          >
+            <div
+              className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${m.bg} ${m.color} ${m.border}`}
+            >
+              <m.icon className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-3xl font-bold text-text-primary tracking-tight">
-                {metric.value}
+              <p className="text-sm font-medium text-text-muted mb-1">
+                {m.title}
               </p>
-              <p className="text-xs text-text-muted mt-1 font-medium">
-                {metric.sub}
+              <h3 className="text-2xl font-bold text-text-primary tracking-tight">
+                {m.value}
+              </h3>
+              <p className="text-xs font-medium text-text-secondary mt-1">
+                {m.sub}
               </p>
             </div>
           </DashboardSurface>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* RECENT DEALS (Takes 2 columns) */}
-        <div className="lg:col-span-2 space-y-4">
-          <h3 className="text-sm font-semibold text-text-primary px-1">
-            Últimas Vendas Fechadas
+      {/* Recents */}
+      <h3 className="text-sm font-bold uppercase tracking-wider text-text-secondary mb-4">
+        Últimos Fechamentos
+      </h3>
+
+      {wonOpps.length === 0 ? (
+        <div className="flex flex-col items-center justify-center p-12 text-center bg-surface-elevated border border-border-default rounded-xl border-dashed">
+          <MascotSearching className="w-24 h-24 opacity-80 mb-6" />
+          <h3 className="text-lg font-bold text-text-primary mb-2">
+            Ainda não há fechamentos
           </h3>
-          <DashboardSurface className="overflow-hidden">
-            {recentDeals.length > 0 ? (
-              <div className="divide-y divide-border-subtle">
-                {recentDeals.map((deal, i) => (
-                  <div
-                    key={i}
-                    className="p-5 flex items-center justify-between hover:bg-surface-hover transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-surface-elevated border border-border-default flex items-center justify-center text-primary font-bold">
-                        {deal.name.charAt(0)}
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-text-primary">
-                          {deal.name}
-                        </h4>
-                        <p className="text-xs text-text-muted flex items-center gap-2 mt-0.5">
-                          {deal.type} • {deal.date}
-                        </p>
-                      </div>
+          <p className="text-sm text-text-muted max-w-md mb-6">
+            Movimente leads para a etapa "Ganho" no seu Pipeline para que a
+            receita apareça aqui e seja contabilizada.
+          </p>
+          <Button variant="outline">Ir para Pipeline</Button>
+        </div>
+      ) : (
+        <DashboardSurface className="p-0 overflow-hidden">
+          <div className="divide-y divide-border-subtle">
+            {wonOpps.map((deal) => {
+              const val = deal.actualValueCents || deal.expectedValueCents || 0;
+              return (
+                <div
+                  key={deal.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-5 hover:bg-surface-hover transition-colors"
+                >
+                  <div className="flex items-center gap-4 mb-3 sm:mb-0">
+                    <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center border border-success/20 shrink-0">
+                      <DollarSign className="w-5 h-5 text-success" />
                     </div>
-                    <div className="text-right flex items-center gap-4">
-                      <div>
-                        <span className="block text-sm font-bold text-success">
-                          R$ {deal.value.toLocaleString("pt-BR")}
-                        </span>
-                        <span className="text-[10px] uppercase font-bold text-success bg-success/10 px-1.5 py-0.5 rounded tracking-wider">
-                          {deal.status}
-                        </span>
+                    <div>
+                      <h4 className="font-bold text-text-primary text-[15px]">
+                        {deal.leadName || "Lead desconhecido"}
+                      </h4>
+                      <div className="flex items-center gap-2 mt-0.5 text-xs text-text-muted font-medium">
+                        <Calendar className="w-3.5 h-3.5" />
+                        {deal.closedAt
+                          ? new Date(deal.closedAt).toLocaleDateString("pt-BR")
+                          : "Data não registrada"}
                       </div>
-                      <Button
-                        size="icon-sm"
-                        variant="ghost"
-                        className="text-text-muted hover:text-text-primary"
-                      >
-                        <ArrowUpRight className="w-4 h-4" />
-                      </Button>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="p-12 flex flex-col items-center justify-center text-center">
-                <div className="w-12 h-12 rounded-full bg-surface-elevated border border-border-strong flex items-center justify-center mb-4 text-text-muted">
-                  <DollarSign className="w-5 h-5" />
-                </div>
-                <h4 className="text-sm font-semibold text-text-primary mb-1">
-                  Nenhuma venda registrada ainda
-                </h4>
-                <p className="text-xs text-text-muted max-w-sm">
-                  Feche sua primeira negociação no pipeline para ver seus
-                  resultados refletidos aqui.
-                </p>
-              </div>
-            )}
-          </DashboardSurface>
-        </div>
 
-        {/* PERFORMANCE SUMMARY */}
-        <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-text-primary px-1">
-            Resumo de Conversão
-          </h3>
-          <DashboardSurface className="p-6">
-            <div className="space-y-6">
-              <div>
-                <div className="flex justify-between text-xs mb-1.5 font-medium">
-                  <span className="text-text-secondary">
-                    Propostas Enviadas
-                  </span>
-                  <span className="text-text-primary">12</span>
+                  <div className="flex items-center gap-6 sm:text-right ml-14 sm:ml-0 border-t sm:border-0 border-border-subtle pt-3 sm:pt-0">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-success/10 text-success text-[10px] font-bold rounded uppercase tracking-wide border border-success/20">
+                      <CheckCircle2 className="w-3 h-3" />
+                      Fechado
+                    </div>
+                    <div className="text-lg font-bold text-text-primary tracking-tight">
+                      {formatCurrency(val)}
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full h-1.5 bg-surface-elevated rounded-full overflow-hidden border border-border-subtle">
-                  <div className="h-full bg-text-muted w-full" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-xs mb-1.5 font-medium">
-                  <span className="text-text-secondary">Em Negociação</span>
-                  <span className="text-text-primary">5</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface-elevated rounded-full overflow-hidden border border-border-subtle">
-                  <div className="h-full bg-accent w-[40%]" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-xs mb-1.5 font-medium">
-                  <span className="text-text-secondary">Vendas Ganhas</span>
-                  <span className="text-success">2</span>
-                </div>
-                <div className="w-full h-1.5 bg-surface-elevated rounded-full overflow-hidden border border-border-subtle">
-                  <div className="h-full bg-success w-[15%]" />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-border-subtle">
-              <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
-                Taxa de Conversão
-              </h4>
-              <p className="text-2xl font-bold text-text-primary">16.6%</p>
-              <p className="text-xs text-text-muted mt-1">
-                Acima da média do mercado (12%)
-              </p>
-            </div>
-          </DashboardSurface>
-        </div>
-      </div>
+              );
+            })}
+          </div>
+        </DashboardSurface>
+      )}
     </div>
   );
 }

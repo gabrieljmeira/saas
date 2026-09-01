@@ -15,6 +15,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { PageHeader } from "@/components/ui/page-header";
+
 export default async function ConfiguracoesPage() {
   const supabase = await createClient();
   const {
@@ -31,13 +33,11 @@ export default async function ConfiguracoesPage() {
 
   return (
     <div className="flex-1 p-6 md:p-8 max-w-[900px] mx-auto w-full flex flex-col gap-8 animate-in fade-in duration-500">
-      <div className="border-b border-border-default pb-6">
-        <h1 className="text-2xl font-semibold text-text-primary tracking-tight mb-1">
-          Configurações
-        </h1>
-        <p className="text-sm text-text-muted">
-          Gerencie as preferências da sua conta e do seu perfil público.
-        </p>
+      <div className="mb-2">
+        <PageHeader
+          title="Configurações"
+          description="Gerencie as preferências da sua conta e do seu perfil público."
+        />
       </div>
 
       <div className="space-y-8">
@@ -156,20 +156,25 @@ export default async function ConfiguracoesPage() {
             </h3>
           </div>
           <DashboardSurface className="p-6">
-             <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
+            <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-sm font-medium">Gerenciar Plano e Cobrança</span>
+                <span className="text-sm font-medium">
+                  Gerenciar Plano e Cobrança
+                </span>
                 <span className="text-xs text-text-muted mt-1">
-                  Visualize seu uso, compre créditos extras ou altere o seu plano.
+                  Visualize seu uso, compre créditos extras ou altere o seu
+                  plano.
                 </span>
               </div>
-              <a href="/configuracoes/billing" className="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-primary text-primary-foreground h-10 px-4 py-2 hover:bg-primary/90">
+              <a
+                href="/configuracoes/billing"
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium border bg-primary text-primary-foreground h-10 px-4 py-2 hover:bg-primary/90"
+              >
                 Acessar Cobrança
               </a>
-             </div>
+            </div>
           </DashboardSurface>
         </section>
-
       </div>
     </div>
   );

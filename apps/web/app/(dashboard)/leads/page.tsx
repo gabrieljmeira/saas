@@ -4,6 +4,7 @@ import { db } from "@saas/db/client";
 import { leads } from "@saas/db/schema";
 import { eq, desc, asc, ilike, and, or, sql, gte } from "drizzle-orm";
 import { LeadsClient, LeadRow } from "@/components/leads/leads-client";
+import { PageHeader } from "@/components/ui/page-header";
 
 export default async function LeadsPage({
   searchParams,
@@ -11,16 +12,22 @@ export default async function LeadsPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     redirect("/login");
   }
 
   const resolvedParams = await searchParams;
-  const q = typeof resolvedParams.q === 'string' ? resolvedParams.q : '';
-  const status = typeof resolvedParams.status === 'string' ? resolvedParams.status : '';
-  const pageParam = typeof resolvedParams.page === 'string' ? parseInt(resolvedParams.page, 10) : 1;
+  const q = typeof resolvedParams.q === "string" ? resolvedParams.q : "";
+  const status =
+    typeof resolvedParams.status === "string" ? resolvedParams.status : "";
+  const pageParam =
+    typeof resolvedParams.page === "string"
+      ? parseInt(resolvedParams.page, 10)
+      : 1;
   const page = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
   const limit = 50;
   const offset = (page - 1) * limit;
@@ -33,8 +40,8 @@ export default async function LeadsPage({
       or(
         ilike(leads.name, `%${q}%`),
         ilike(leads.niche, `%${q}%`),
-        ilike(leads.city, `%${q}%`)
-      )!
+        ilike(leads.city, `%${q}%`),
+      )!,
     );
   }
 
@@ -59,11 +66,11 @@ export default async function LeadsPage({
       hasWhatsapp: true,
       website: true,
       updatedAt: true,
-    }
+    },
   });
 
   // Map to Client props
-  const formattedLeads: LeadRow[] = userLeads.map(l => ({
+  const formattedLeads: LeadRow[] = userLeads.map((l) => ({
     id: l.id,
     name: l.name,
     niche: l.niche,
@@ -73,27 +80,23 @@ export default async function LeadsPage({
     rating: l.rating,
     hasWhatsapp: l.hasWhatsapp,
     website: l.website,
-    updatedAt: l.updatedAt
+    updatedAt: l.updatedAt,
   }));
 
   return (
-    <div className="p-6 md:p-8 w-full max-w-[1600px] mx-auto h-full flex flex-col">
-      <div className="mb-6 shrink-0">
-        <h1 className="text-2xl md:text-3xl font-semibold text-text-primary tracking-tight">Leads</h1>
-        <p className="text-text-muted mt-1 text-sm md:text-base">
-          Gerencie e qualifique empresas descobertas.
-        </p>
-      </div>
+    <div className="w-full max-w-6xl mx-auto pb-12 animate-in fade-in duration-500">
+      <PageHeader
+        title="Leads"
+        description="Gerencie e qualifique empresas descobertas."
+      />
 
-      <div className="flex-1 min-h-0">
-        <LeadsClient 
-          initialLeads={formattedLeads} 
-          currentQuery={q}
-          currentStatus={status}
-          page={page}
-          hasMore={formattedLeads.length === limit}
-        />
-      </div>
+      <LeadsClient
+        initialLeads={formattedLeads}
+        currentQuery={q}
+        currentStatus={status}
+        page={page}
+        hasMore={formattedLeads.length === limit}
+      />
     </div>
   );
 }

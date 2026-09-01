@@ -81,12 +81,28 @@ export async function getFeed(params: {
   });
 
   const hasNextPage = posts.length > limit;
-  const items = hasNextPage ? posts.slice(0, -1) : posts;
+  const rawItems = hasNextPage ? posts.slice(0, -1) : posts;
+
+  // Anonymize server-side
+  const items = rawItems.map((post) => {
+    const isOfficial =
+      post.author?.role === "STAFF" || post.author?.role === "OWNER";
+    return {
+      ...post,
+      author: isOfficial
+        ? post.author
+        : {
+            ...post.author,
+            name: `Membro ${post.authorId.substring(0, 4).toUpperCase()}`,
+            username: `membro_${post.authorId.substring(0, 4)}`,
+          },
+    };
+  });
 
   const nextCursor =
     items.length > 0
       ? {
-          createdAt: items[items.length - 1].createdAt,
+          createdAt: items[items.length - 1].createdAt!,
           id: items[items.length - 1].id,
         }
       : undefined;
