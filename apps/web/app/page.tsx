@@ -19,8 +19,13 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FetchLeadsLogo } from "@/components/ui/fetchleads-logo";
+import { createClient } from "@/lib/supabase/server";
+import { LandingPricing } from "@/components/marketing/landing-pricing";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-text-primary selection:bg-primary/30 font-sans">
       {/* Navbar */}

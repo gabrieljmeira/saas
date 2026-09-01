@@ -5,6 +5,7 @@ import { profiles } from "@saas/db/schema/users";
 import { eq } from "drizzle-orm";
 import { getCreditBalance, getTodayUsage, getPlanConfig, PlanType } from "@saas/core";
 import { PricingCards } from "@/components/billing/pricing-cards";
+import { PaddleCheckoutProvider } from "@/components/billing/paddle-provider";
 
 export const metadata = {
   title: "Plano e Cobrança | FetchLeads",
@@ -85,7 +86,6 @@ export default async function BillingPage() {
 }
 
 // Num arquivo real, isso poderia importar um Client Component que integra o window.Paddle
-import { PaddleCheckoutProvider } from "./paddle-provider";
 
 function PricingCardsWrapper({ currentPlan }: { currentPlan: string }) {
   return (

@@ -37,6 +37,7 @@ export async function loginAction(formData: FormData) {
   cookieStore.set("sb-remember-me", remember ? "true" : "false", {
     path: "/",
     secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * 365, // 1 year
   });
 
   const supabase = await createClient();

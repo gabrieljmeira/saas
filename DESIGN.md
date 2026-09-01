@@ -35,3 +35,15 @@ Os estados (searching, loading, processing) representam momentos que agregam int
 1. **LEVEL 1 (Micro)**: Button spinners, pequenos progresso. (Ação pontual).
 2. **LEVEL 2 (Component)**: Skeletons, text-shimmer. (Carregamento de drawer, tabelas).
 3. **LEVEL 3 (Product Process)**: _Branded Product Process_ com a logo animada do FetchLeads (Ação core como busca de leads e inteligência AI).
+
+
+==================================================
+PRICING & BILLING UI
+==================================================
+
+- **Pricing Structure**: 3 main plans (Free, Freelancer, Agency) + 3 standalone credit packages (8, 20, 40).
+- **Monthly/Annual Toggle**: A client-side segmented control toggle switching between Monthly and Annual modes. Annual displays discount and price equivalent.
+- **Highlighted Plan**: Freelancer is the recommended tier. Highlighted with purple borders, gradients, and a "Mais popular" badge.
+- **Credit Cards**: Below the main plans. Simple grid indicating the cost per extra search.
+- **CTA Behavior**: Free -> `/signup` or `/dashboard`. Paid -> Paddle Checkout (if authenticated) or `/login?next=/?checkout=...` (if unauthenticated).
+- **Visual Relation with Hero**: Uses the same `bg-slate-950` with purple glow (`bg-purple-600/10 blur-[120px]`), slate borders (`border-slate-800`), and typography rules to look unified. No generic white cards.
