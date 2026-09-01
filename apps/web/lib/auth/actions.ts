@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { db } from "@saas/db/client";
 import { profiles } from "@saas/db/schema";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import {
@@ -29,8 +30,6 @@ export async function loginAction(formData: FormData) {
     return { error: "Dados inválidos." };
   }
 
-  // Import locally to avoid modifying top level if not needed, or just ensure it's available
-  const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
 
   // Set the preference BEFORE calling createClient/signInWithPassword
@@ -132,7 +131,6 @@ export async function logoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
 
-  const { cookies } = await import("next/headers");
   const cookieStore = await cookies();
   cookieStore.delete("sb-remember-me");
 
