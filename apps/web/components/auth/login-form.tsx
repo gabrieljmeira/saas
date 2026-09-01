@@ -16,13 +16,9 @@ export function LoginForm() {
   const nextParam = searchParams.get("next") || "";
   const resetSuccess = searchParams.get("reset") === "success";
 
-  // We explicitly want unknown/any due to FormData action type bridging
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [state, formAction, pending] = useActionState<any, FormData>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (prevState: any, formData: FormData) => {
-      return await loginAction(formData);
-    },
+    loginAction as any,
     {},
   );
 
@@ -47,9 +43,14 @@ export function LoginForm() {
       )}
 
       {state?.error && (
-        <div className="mb-6 p-4 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3 shadow-sm" role="alert">
+        <div
+          className="mb-6 p-4 rounded-lg bg-destructive/10 border border-destructive/20 flex items-start gap-3 shadow-sm"
+          role="alert"
+        >
           <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
-          <p className="text-sm text-destructive font-medium leading-relaxed">{state.error}</p>
+          <p className="text-sm text-destructive font-medium leading-relaxed">
+            {state.error}
+          </p>
         </div>
       )}
 
@@ -100,8 +101,17 @@ export function LoginForm() {
 
         <div className="flex items-center justify-between pt-1 pb-2">
           <div className="flex items-center gap-2">
-            <Checkbox id="remember" name="remember" defaultChecked value="on" className="data-[state=checked]:bg-primary data-[state=checked]:border-primary" />
-            <Label htmlFor="remember" className="text-sm font-medium text-text-muted cursor-pointer hover:text-text-primary transition-colors">
+            <Checkbox
+              id="remember"
+              name="remember"
+              defaultChecked
+              value="on"
+              className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+            />
+            <Label
+              htmlFor="remember"
+              className="text-sm font-medium text-text-muted cursor-pointer hover:text-text-primary transition-colors"
+            >
               Manter conectado
             </Label>
           </div>
@@ -139,11 +149,21 @@ export function LoginForm() {
             Criar conta
           </Link>
         </div>
-        
+
         <div className="flex items-center gap-4 text-xs text-text-muted/60">
-          <Link href="/termos" className="hover:text-text-muted transition-colors">Termos de Uso</Link>
+          <Link
+            href="/termos"
+            className="hover:text-text-muted transition-colors"
+          >
+            Termos de Uso
+          </Link>
           <span>&bull;</span>
-          <Link href="/privacidade" className="hover:text-text-muted transition-colors">Privacidade</Link>
+          <Link
+            href="/privacidade"
+            className="hover:text-text-muted transition-colors"
+          >
+            Privacidade
+          </Link>
         </div>
       </div>
     </div>

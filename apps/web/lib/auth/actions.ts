@@ -14,7 +14,7 @@ import {
   ResetPasswordSchema,
 } from "./schemas";
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(prevState: any, formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const remember = formData.get("remember") === "on";
