@@ -45,7 +45,7 @@ export default async function DashboardLayout({
 
       {/* Main Column */}
       <div className="flex flex-1 flex-col overflow-hidden w-full">
-        <AppTopbar />
+        <AppTopbar profile={profile as any} />
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden bg-background">
           {children}

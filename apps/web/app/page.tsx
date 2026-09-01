@@ -24,7 +24,9 @@ import { LandingPricing } from "@/components/marketing/landing-pricing";
 
 export default async function Home() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-text-primary selection:bg-primary/30 font-sans">

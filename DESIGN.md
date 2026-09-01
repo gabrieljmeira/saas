@@ -47,3 +47,16 @@ PRICING & BILLING UI
 - **Credit Cards**: Below the main plans. Simple grid indicating the cost per extra search.
 - **CTA Behavior**: Free -> `/signup` or `/dashboard`. Paid -> Paddle Checkout (if authenticated) or `/login?next=/?checkout=...` (if unauthenticated).
 - **Visual Relation with Hero**: Uses the same `bg-slate-950` with purple glow (`bg-purple-600/10 blur-[120px]`), slate borders (`border-slate-800`), and typography rules to look unified. No generic white cards.
+
+
+==================================================
+APP HEADER & ACCOUNT MENU
+==================================================
+
+- **Header Height**: Compacto, fixo em `h-16` (64px).
+- **Surfaces**: O Header principal utiliza `bg-surface` e `border-b border-border-subtle`, mantendo integrauo total com a Sidebar (nuo ho duplicauo da logo em telas Desktop, o header comea *aps* a sidebar).
+- **Account Trigger**: A orea do usuorio ? minimalista e refinada, incluindo Nome, Badge (se STAFF/OWNER), Iniciais/Avatar e Chevron (`w-3.5 h-3.5`). Possui hover sutil (`hover:bg-surface-hover`) e focus ring (`focus-visible:ring-primary/50`).
+- **Account Dropdown**: Componente client-side construdo sobre o `@base-ui/react/menu` (Shadcn Dropdown Menu). Layout de `256px` (`w-64`) de largura.
+- **Role Display**: "USER" nuo exibe label (comportamento clean). "STAFF" exibe "Equipe FetchLeads" e "OWNER" exibe "Conta oficial", ambos com cone `BadgeCheck` roxo. Evita nomes t?cnicos de backend expostos.
+- **Mobile Behavior**: Em resolues baixas (`md:hidden`), o hamburger menu e a Logo suo exibidos no Header, enquanto no Account Trigger o Nome é ocultado e apenas o Avatar+Chevron permanecem.
+

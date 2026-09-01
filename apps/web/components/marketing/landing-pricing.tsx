@@ -15,13 +15,19 @@ export function LandingPricing({ isAuthenticated }: LandingPricingProps) {
   return (
     <PaddleCheckoutProvider>
       {(openCheckout) => (
-        <PricingContent isAuthenticated={isAuthenticated} openCheckout={openCheckout} />
+        <PricingContent
+          isAuthenticated={isAuthenticated}
+          openCheckout={openCheckout}
+        />
       )}
     </PaddleCheckoutProvider>
   );
 }
 
-function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps & { openCheckout: (priceId: string) => void }) {
+function PricingContent({
+  isAuthenticated,
+  openCheckout,
+}: LandingPricingProps & { openCheckout: (priceId: string) => void }) {
   const [isAnnual, setIsAnnual] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -35,25 +41,36 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
 
       switch (checkoutIntent) {
         case "freelancer-monthly":
-          targetPriceId = PLAN_CONFIG.FREELANCER.priceId.monthly as string | undefined;
+          targetPriceId = PLAN_CONFIG.FREELANCER.priceId.monthly as
+            | string
+            | undefined;
           break;
         case "freelancer-annual":
-          targetPriceId = PLAN_CONFIG.FREELANCER.priceId.annual as string | undefined;
+          targetPriceId = PLAN_CONFIG.FREELANCER.priceId.annual as
+            | string
+            | undefined;
           break;
         case "agency-monthly":
-          targetPriceId = PLAN_CONFIG.AGENCY.priceId.monthly as string | undefined;
+          targetPriceId = PLAN_CONFIG.AGENCY.priceId.monthly as
+            | string
+            | undefined;
           break;
         case "agency-annual":
-          targetPriceId = PLAN_CONFIG.AGENCY.priceId.annual as string | undefined;
+          targetPriceId = PLAN_CONFIG.AGENCY.priceId.annual as
+            | string
+            | undefined;
           break;
         case "credits-8":
-          targetPriceId = CREDIT_PACKAGES.find(c => c.credits === 8)?.priceId || undefined;
+          targetPriceId =
+            CREDIT_PACKAGES.find((c) => c.credits === 8)?.priceId || undefined;
           break;
         case "credits-20":
-          targetPriceId = CREDIT_PACKAGES.find(c => c.credits === 20)?.priceId || undefined;
+          targetPriceId =
+            CREDIT_PACKAGES.find((c) => c.credits === 20)?.priceId || undefined;
           break;
         case "credits-40":
-          targetPriceId = CREDIT_PACKAGES.find(c => c.credits === 40)?.priceId || undefined;
+          targetPriceId =
+            CREDIT_PACKAGES.find((c) => c.credits === 40)?.priceId || undefined;
           break;
       }
 
@@ -106,28 +123,33 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
 
       {/* PLANS */}
       <div className="grid md:grid-cols-3 gap-6 lg:gap-8 relative z-10 items-stretch mb-24">
-        
         {/* FREE CARD */}
         <div className="flex flex-col p-8 rounded-3xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm text-slate-300 relative overflow-hidden transition-colors hover:border-slate-700">
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-white mb-2">Grátis</h3>
-            <p className="text-sm text-slate-400">Para testar o FetchLeads antes de assinar.</p>
+            <p className="text-sm text-slate-400">
+              Para testar o FetchLeads antes de assinar.
+            </p>
           </div>
           <div className="mb-8">
             <span className="text-5xl font-bold text-white">R$0</span>
           </div>
           <ul className="flex flex-col gap-4 flex-1 mb-8 text-sm text-slate-300">
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> 1 busca por dia
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> 1 busca
+              por dia
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Até 5 leads por busca
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Até 5
+              leads por busca
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Instagram disponível
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Instagram
+              disponível
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Experiência básica de prospecção
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" />{" "}
+              Experiência básica de prospecção
             </li>
           </ul>
           <Button
@@ -148,10 +170,13 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
           <div className="absolute -top-4 right-8 bg-purple-600 text-white text-[11px] font-bold px-3 py-1 rounded-b-lg uppercase tracking-wider shadow-sm">
             Mais popular
           </div>
-          
+
           <div className="mb-6 mt-2">
             <h3 className="text-2xl font-bold text-white mb-2">Freelancer</h3>
-            <p className="text-sm text-slate-400">Para freelancers e profissionais que prospectam clientes regularmente.</p>
+            <p className="text-sm text-slate-400">
+              Para freelancers e profissionais que prospectam clientes
+              regularmente.
+            </p>
           </div>
           <div className="mb-8 flex flex-col">
             <div className="flex items-baseline gap-1">
@@ -170,24 +195,31 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
           </div>
           <ul className="flex flex-col gap-4 flex-1 mb-8 text-sm text-slate-300">
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-400 shrink-0" /> 10 buscas por dia
+              <Check className="h-5 w-5 text-purple-400 shrink-0" /> 10 buscas
+              por dia
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-400 shrink-0" /> Dezenas de oportunidades por busca
+              <Check className="h-5 w-5 text-purple-400 shrink-0" /> Dezenas de
+              oportunidades por busca
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-400 shrink-0" /> Todos os resultados encontrados
+              <Check className="h-5 w-5 text-purple-400 shrink-0" /> Todos os
+              resultados encontrados
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-400 shrink-0" /> WhatsApp, Instagram, Telefone e Site
+              <Check className="h-5 w-5 text-purple-400 shrink-0" /> WhatsApp,
+              Instagram, Telefone e Site
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-purple-400 shrink-0" /> Filtro inteligente por serviço
+              <Check className="h-5 w-5 text-purple-400 shrink-0" /> Filtro
+              inteligente por serviço
             </li>
           </ul>
           <Button
             onClick={() => {
-              const intent = isAnnual ? "freelancer-annual" : "freelancer-monthly";
+              const intent = isAnnual
+                ? "freelancer-annual"
+                : "freelancer-monthly";
               const priceId = isAnnual
                 ? PLAN_CONFIG.FREELANCER.priceId.annual
                 : PLAN_CONFIG.FREELANCER.priceId.monthly;
@@ -203,7 +235,9 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
         <div className="flex flex-col p-8 rounded-3xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm text-slate-300 relative overflow-hidden transition-colors hover:border-slate-700">
           <div className="mb-6">
             <h3 className="text-2xl font-bold text-white mb-2">Agência</h3>
-            <p className="text-sm text-slate-400">Para agências e equipes com maior volume de prospecção.</p>
+            <p className="text-sm text-slate-400">
+              Para agências e equipes com maior volume de prospecção.
+            </p>
           </div>
           <div className="mb-8 flex flex-col">
             <div className="flex items-baseline gap-1">
@@ -217,19 +251,24 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
           </div>
           <ul className="flex flex-col gap-4 flex-1 mb-8 text-sm text-slate-300">
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Buscas ilimitadas
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Buscas
+              ilimitadas
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Resultados ilimitados
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Resultados
+              ilimitados
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Todos os contatos disponíveis
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Todos os
+              contatos disponíveis
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Exportação de leads para Excel
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Exportação
+              de leads para Excel
             </li>
             <li className="flex items-start gap-3">
-              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Acesso prioritário a novos recursos
+              <Check className="h-5 w-5 text-emerald-500 shrink-0" /> Acesso
+              prioritário a novos recursos
             </li>
           </ul>
           <Button
@@ -267,8 +306,8 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
             <div
               key={pkg.id}
               className={`flex flex-col p-6 rounded-2xl border relative transition-colors ${
-                pkg.isPopular 
-                  ? "border-purple-500/30 bg-purple-900/10 shadow-lg shadow-purple-900/5" 
+                pkg.isPopular
+                  ? "border-purple-500/30 bg-purple-900/10 shadow-lg shadow-purple-900/5"
                   : "border-slate-800 bg-slate-900/50 hover:border-slate-700"
               }`}
             >
@@ -282,16 +321,21 @@ function PricingContent({ isAuthenticated, openCheckout }: LandingPricingProps &
                   Mais escolhido
                 </div>
               )}
-              <h4 className="text-lg font-bold text-white mb-2">{pkg.credits} buscas extras</h4>
+              <h4 className="text-lg font-bold text-white mb-2">
+                {pkg.credits} buscas extras
+              </h4>
               <span className="text-3xl font-extrabold text-white mb-6">
                 R${pkg.price.toFixed(2).replace(".", ",")}
               </span>
               <Button
-                onClick={() => pkg.priceId && handleCheckout(pkg.priceId, `credits-${pkg.credits}`)}
+                onClick={() =>
+                  pkg.priceId &&
+                  handleCheckout(pkg.priceId, `credits-${pkg.credits}`)
+                }
                 variant={pkg.isPopular ? "default" : "outline"}
                 className={`mt-auto w-full rounded-xl h-10 font-medium ${
-                  pkg.isPopular 
-                    ? "bg-purple-600 text-white hover:bg-purple-700 border-0" 
+                  pkg.isPopular
+                    ? "bg-purple-600 text-white hover:bg-purple-700 border-0"
                     : "border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white"
                 }`}
               >
